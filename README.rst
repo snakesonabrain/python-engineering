@@ -3,6 +3,20 @@ Python Engineering
 
 This package contains Python functions for engineering applications.
 
+python-engineering bundles a large amount of knowledge and provides it to end users through extensively documented functions. The aim of the package is as follows:
+
+   - Improve correctness through unit-tested functions with parameter validation
+   - Raise awareness on underlying test data and theories supporting engineering correlations and design formulae
+   - Promoting development of open-source engineering software by the worldwide community of engineers
+
+python-engineering is developed using a set of 10 Golden rules which are reflected in the python-engineering function
+architecture and should also be followed by any contributors to the project.
+
+Installation requirements
+-------------------------
+
+python-engineering is written for Python 3.x. Downloading Anaconda3 is recommended for users not familiar with Python development.
+
 Copyright (c) 2016, Bruno Stuyts
 All rights reserved.
 
