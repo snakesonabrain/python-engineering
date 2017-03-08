@@ -20,6 +20,11 @@ python-engineering is written for Python 3.x. Downloading Anaconda3 is recommend
 Copyright (c) 2016, Bruno Stuyts
 All rights reserved.
 
+License
+--------
+
+python-engineering is provided under a Creative Commons Attribution-ShareAlike 4.0 International Public License. Please check the license terms below and in the license file.
+
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
 
