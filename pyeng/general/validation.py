@@ -224,6 +224,12 @@ class ValidationDecorator(object):
                 validate = kwargs['validate']
             except:
                 validate = None
+
+            try:
+                fail_silently = kwargs['fail_silently']
+            except:
+                fail_silently = True
+
             if validate or validate is None:
 
                 try:
@@ -258,8 +264,8 @@ class ValidationDecorator(object):
             else:
                 pass  # No validation
 
-            if validated == False:
-                raise ValueError("Error during function validation, %s" % errorstring)
+            # if not validated:
+            #     raise ValueError("Error during function validation, %s" % errorstring)
 
             return fn(*args, validated=validated, errorstring=errorstring, **kwargs)
 

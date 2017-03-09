@@ -28,12 +28,15 @@ Contents
    geotechnical/Geotechnical_engineering
    
    hydraulics/Hydraulics
-     
+
+
 How-to
 ------------
 
 .. toctree::
     :maxdepth: 1
+
+    Getting_started
 
     Golden_rules
 

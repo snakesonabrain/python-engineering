@@ -76,6 +76,9 @@ Donebythesecondlaw at the English language Wikipedia [GFDL (http://www.gnu.org/c
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         # Calculation statements
         if not np.isnan(relative_roughness):
             roughness = relative_roughness * pipe_diameter * 1000.0
