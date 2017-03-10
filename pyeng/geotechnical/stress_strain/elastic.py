@@ -59,6 +59,9 @@ def stresses_pointload_boussinesq(point_load, x, y, z, poisson_coefficient=0.3, 
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         radius_xy = np.sqrt(x**2.0 + y**2.0)
         radius = np.sqrt(radius_xy**2.0 + z**2.0)
 
@@ -91,7 +94,7 @@ def stresses_pointload_boussinesq(point_load, x, y, z, poisson_coefficient=0.3, 
             'radius [m]': radius,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'sigma_z [kPa]': np.NaN,
@@ -103,7 +106,7 @@ def stresses_pointload_boussinesq(point_load, x, y, z, poisson_coefficient=0.3, 
                 'radius [m]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise
 
 STRESSES_LINELOAD_BOUSSINESQ = {
     'line_load': {'type': 'float', 'min_value': None, 'max_value': None},
@@ -144,6 +147,9 @@ def stresses_lineload_boussinesq(line_load, x, z, fail_silently=True, **kwargs):
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         sigma_z = (2.0 * line_load * z**3.0)/(np.pi * (x**2.0 + z**2.0)**2.0)
         sigma_x = (2.0 * line_load * (x**2.0) * z)/(np.pi * (x**2.0 + z**2.0)**2.0)
         tau_zx = (2.0 * line_load * x * (z ** 2.0)) / (np.pi * (x ** 2.0 + z ** 2.0) ** 2.0)
@@ -154,7 +160,7 @@ def stresses_lineload_boussinesq(line_load, x, z, fail_silently=True, **kwargs):
             'tau_zx [kPa]': tau_zx,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'sigma_z [kPa]': np.NaN,
@@ -162,7 +168,7 @@ def stresses_lineload_boussinesq(line_load, x, z, fail_silently=True, **kwargs):
                 'tau_zx [kPa]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise
 
 STRESSES_STRIPLOADCONSTANT_BOUSSINESQ = {
     'strip_load': {'type': 'float', 'min_value': None, 'max_value': None},
@@ -205,6 +211,9 @@ def stresses_striploadconstant_boussinesq(strip_load, load_width, x, z, fail_sil
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         beta = np.arctan((x - load_width) / z)
         alpha = np.arctan(x / z) - beta
 
@@ -220,7 +229,7 @@ def stresses_striploadconstant_boussinesq(strip_load, load_width, x, z, fail_sil
             'tau_zx [kPa]': tau_zx,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'sigma_z [kPa]': np.NaN,
@@ -228,7 +237,7 @@ def stresses_striploadconstant_boussinesq(strip_load, load_width, x, z, fail_sil
                 'tau_zx [kPa]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise
 
 STRESSES_STRIPLOADTRIANGULAR_BOUSSINESQ = {
     'strip_load_max': {'type': 'float', 'min_value': None, 'max_value': None},
@@ -271,6 +280,9 @@ def stresses_striploadtriangular_boussinesq(strip_load_max, load_width, x, z, fa
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         beta = np.arctan((x - load_width) / z)
         alpha = np.arctan(x / z) - beta
         r1 = np.sqrt(x**2.0 + z**2.0)
@@ -287,7 +299,7 @@ def stresses_striploadtriangular_boussinesq(strip_load_max, load_width, x, z, fa
             'tau_zx [kPa]': tau_zx,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'sigma_z [kPa]': np.NaN,
@@ -295,7 +307,7 @@ def stresses_striploadtriangular_boussinesq(strip_load_max, load_width, x, z, fa
                 'tau_zx [kPa]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise
 
 
 STRESSES_CIRCLE_BOUSSINESQ = {
@@ -340,6 +352,9 @@ def stresses_circle_boussinesq(circle_stress, circle_radius, z, radius=0.0, pois
     """
 
     try:
+
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
         if radius==0.0:
             sigma_z = circle_stress * (1.0 - ((1.0 / (1.0 + (circle_radius / z) ** 2.0)) ** 1.5))
@@ -788,7 +803,7 @@ def stresses_circle_boussinesq(circle_stress, circle_radius, z, radius=0.0, pois
             'sigma_theta [kPa]': sigma_theta,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'sigma_z [kPa]': np.NaN,
@@ -796,7 +811,7 @@ def stresses_circle_boussinesq(circle_stress, circle_radius, z, radius=0.0, pois
                 'sigma_theta [kPa]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise
 
 STRESSES_RECTANGLE_BOUSSINESQ = {
     'rectangle_stress': {'type': 'float', 'min_value': None, 'max_value': None},
@@ -850,6 +865,9 @@ def stresses_rectangle_boussinesq(rectangle_stress, rectangle_length, rectangle_
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         if rectangle_width > rectangle_length:
             raise ValueError("Rectangle length must be greater than rectangle width")
 
@@ -874,7 +892,7 @@ def stresses_rectangle_boussinesq(rectangle_stress, rectangle_length, rectangle_
             'tau_zx [kPa]': tau_zx,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'sigma_z [kPa]': np.NaN,
@@ -883,7 +901,7 @@ def stresses_rectangle_boussinesq(rectangle_stress, rectangle_length, rectangle_
                 'tau_zx [kPa]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise
 
 
 

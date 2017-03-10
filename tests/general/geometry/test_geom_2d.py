@@ -5,6 +5,7 @@ __author__ = 'Bruno Stuyts'
 
 import unittest
 import numpy as np
+import math
 from pyeng.general.geometry import geom_2d
 
 
@@ -15,9 +16,24 @@ class Test_RighttriangleRight(unittest.TestCase):
 
     def test_values(self):
         self.assertEqual(self.shape.centroid['area [m2]'],0.5)
+        self.shape.base_width = 2.0
+        self.assertEqual(self.shape.centroid['area [m2]'], 1.0)
 
     def test_error(self):
-        self.assertRaises(ValueError,geom_2d.RightTriangleRight,-1.0,1.0)
+        self.assertRaises(ValueError,geom_2d.RightTriangleRight,-1.0,1.0,fail_silently=False)
+
+    def test_error_after_modification(self):
+        # Check that silent failures work as expected
+        self.shape.base_width = -1.0
+        self.assertEqual(math.isnan(self.shape.centroid['area [m2]']),True)
+        # Check that explicit failure work as expected
+        self.shape.fail_silently=False
+        try:
+            self.shape.base_width=-1.0
+            exception_raised = False
+        except:
+            exception_raised = True
+        self.assertEqual(exception_raised,True)
 
 
 class Test_RightTriangleLeft(unittest.TestCase):

@@ -25,16 +25,22 @@ def pressuredrop_relativeroughness_moody(reynolds_number, pipe_diameter, pipe_ma
                                          fluid_density, gravity_coefficient=9.81, relative_roughness=np.NaN,
                                          fail_silently=True, **kwargs):
     """
-    The Moody diagram relates Reynolds number to Darcy-Weissbach friction factor. This friction factor is used to calculate the head loss in a pipe. The underlying dataset consists of more than 10,000 experiments from various sources. For the laminar flow regime (Re < 3000), roughness has no discernible effect, and the Darcy-Weisbach friction factor was determined analytically by Poisseuille. For the turbulent flow regime, the relationship between the friction factor, the Reynolds number Re, and the relative roughness is more complex and is derived from the Moody chart. The figure shows values for typical pipe walls. These values are coded into the function but an override can also be specified.
+    The Moody diagram relates Reynolds number to Darcy-Weissbach friction factor. This friction factor is used to
+    calculate the head loss in a pipe. The underlying dataset consists of more than 10,000 experiments from various
+    sources. For the laminar flow regime (Re < 3000), roughness has no discernible effect,
+    and the Darcy-Weisbach friction factor was determined analytically by Poisseuille. For the turbulent flow regime,
+    the relationship between the friction factor, the Reynolds number Re, and the relative roughness is more complex
+    and is derived from the Moody chart. The figure shows values for typical pipe walls. These values are coded into
+    the function but an override can also be specified.
 
     :param reynolds_number: Reynolds number (:math:`Re`) [:math:`-`]  - Suggested range: 500.0<=reynolds_number<=100000000.0
     :param pipe_diameter: Pipe inside diameter (:math:`d`) [:math:`m`]  - Suggested range: 0.0<=pipe_diameter
-    :param pipe_material: Pipe material (:math:``) [:math:`-`] Options: ("Concrete,coarse","Concrete,new smooth","Drawn tubing","Glass,plastic,perspex","Iron,cast","Sewers,old","Steel,mortar lined","Steel,rusted","Steel,structural or forged","Water mains,old"), regex: None
+    :param pipe_material: Pipe material [:math:`-`] Options: ("Concrete,coarse","Concrete,new smooth","Drawn tubing","Glass,plastic,perspex","Iron,cast","Sewers,old","Steel,mortar lined","Steel,rusted","Steel,structural or forged","Water mains,old"), regex: None
     :param pipe_length: Pipe length (:math:`L`) [:math:`m`]  - Suggested range: 0.0<=pipe_length
     :param average_velocity: Average velocity of the fluid in the pipe (:math:`V`) [:math:`m/s`]  - Suggested range: 0.0<=average_velocity
     :param fluid_density: Density of the fluid (:math:`\\rho`) [:math:`kg/m3`]  - Suggested range: 500.0<=fluid_density<=2500.0
     :param gravity_coefficient: Acceleration due to gravity (:math:`g`) [:math:`m/s2`] (optional, default=9.81) - Suggested range: 9.7<=gravity_coefficient<=10.0
-    :param relative_roughness: Relative roughness override (:math:``) [:math:`-`] (optional, default=np.NaN) - Suggested range: relative_roughness<=0.05
+    :param relative_roughness: Relative roughness override [:math:`-`] (optional, default=np.NaN) - Suggested range: relative_roughness<=0.05
 
     .. math::
         \\text{Head loss:} \\quad f_D \\frac{L}{d} \\frac{V^2}{2 g}
@@ -49,12 +55,6 @@ def pressuredrop_relativeroughness_moody(reynolds_number, pipe_diameter, pipe_ma
 
     :rtype: Python dictionary with keys ['friction_factor [-]','roughness [mm]','head_loss [m]','pressure_drop [Pa]','flow_regime [-]','friction_factor_laminar [-]','friction_factor_turbulent [-]']
 
-    .. figure:: images\\Moody_diagram.png
-        :figwidth: 700
-        :width: 560
-        :align: center
-
-        Moody diagram
 
     .. figure:: images\\Moody_diagram_matplotlib.png
         :figwidth: 500
@@ -64,13 +64,6 @@ def pressuredrop_relativeroughness_moody(reynolds_number, pipe_diameter, pipe_ma
         Moody diagram - Matplotlib output
 
     Reference - Moody, L. F. (1944), "Friction factors for pipe flow", Transactions of the ASME, 66 (8): 671-684
-
-https://en.wikipedia.org/wiki/Moody_chart
-
-Donebythesecondlaw at the English language Wikipedia [GFDL (http://www.gnu.org/copyleft/fdl.html) or CC-BY-SA-3.0 (http://creativecommons.org/licenses/by-sa/3.0/)], via Wikimedia Commons
-
-
-
 
     """
 
@@ -518,7 +511,7 @@ Donebythesecondlaw at the English language Wikipedia [GFDL (http://www.gnu.org/c
             'friction_factor_turbulent [-]': friction_factor_turbulent,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'friction_factor [-]': np.NaN,
@@ -530,4 +523,4 @@ Donebythesecondlaw at the English language Wikipedia [GFDL (http://www.gnu.org/c
                 'friction_factor_turbulent [-]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise

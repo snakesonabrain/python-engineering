@@ -35,6 +35,9 @@ def lateralearthpressure_plasticity_massarsch(plasticity_index, fail_silently=Tr
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         # Calculation statements
         Ko = np.interp(plasticity_index,
                        [0.0, 110.0],
@@ -44,13 +47,13 @@ def lateralearthpressure_plasticity_massarsch(plasticity_index, fail_silently=Tr
             'Ko [-]': Ko,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'Ko [-]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise
 
 
 SECONDARYCOMPRESSIONRATIO_WATERCONTENT_MESRI = {
@@ -91,6 +94,9 @@ def secondarycompressionratio_watercontent_mesri(water_content, fail_silently=Tr
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         secondary_compression_ratio = 10.0**(np.interp(np.log10(water_content),
                                                        [np.log10(9.999703334951846), np.log10(3822.2040801773114)],
                                                        [np.log10(0.10000890047953175), np.log10(39.942386556889026)]))
@@ -99,11 +105,11 @@ def secondarycompressionratio_watercontent_mesri(water_content, fail_silently=Tr
             'secondary_compression_ratio [%]': secondary_compression_ratio,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'secondary_compression_ratio [%]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise
 

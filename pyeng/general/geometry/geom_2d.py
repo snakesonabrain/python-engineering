@@ -96,10 +96,49 @@ class RightTriangleRight(TwodimensionalShape):
 
     """
 
+    def __init__(self,base_width, height,fail_silently=True):
+        self._base_width = base_width
+        self._height = height
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def base_width(self):
+        return self._base_width
+
+    @base_width.setter
+    def base_width(self, value):
+        self._base_width = value
+        if value: self.calculate()
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._base_width, self._height, fail_silently=self._fail_silently)
+
     @ValidationDecorator(RIGHTTRIANGLERIGHT)
-    def __init__(self, base_width, height,fail_silently=True,**kwargs):
+    def calculate_validated(self, base_width, height,fail_silently=True,**kwargs):
+
+        super(RightTriangleRight, self).__init__()
+
         try:
-            super(RightTriangleRight, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation: %s" % kwargs['errorstring'])
 
             self.centroid['area [m2]'] = 0.5 * base_width * height
             self.centroid['x [m]'] = 2.0 * base_width / 3.0
@@ -118,11 +157,13 @@ class RightTriangleRight(TwodimensionalShape):
             self.product_inertia['I_xc_yc [m4]'] = ((base_width ** 2.0) * (height ** 2.0)) / 72.0
             self.product_inertia['I_x_y [m4]'] = ((base_width ** 2.0) * (height ** 2.0)) / 8.0
 
-        except Exception as err:
+        except:
+            super(RightTriangleRight, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 
 RIGHTTRIANGLELEFT = {
@@ -173,10 +214,50 @@ class RightTriangleLeft(TwodimensionalShape):
 
     """
 
+    def __init__(self,base_width, height,fail_silently=True):
+
+        self._base_width = base_width
+        self._height = height
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def base_width(self):
+        return self._base_width
+
+    @base_width.setter
+    def base_width(self, value):
+        self._base_width = value
+        if value: self.calculate()
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._base_width, self._height, fail_silently=self._fail_silently)
+
     @ValidationDecorator(RIGHTTRIANGLELEFT)
-    def __init__(self, base_width, height, fail_silently=True, **kwargs):
+    def calculate_validated(self, base_width, height, fail_silently=True, **kwargs):
+
+        super(RightTriangleLeft, self).__init__()
+
         try:
-            super(RightTriangleLeft, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             self.centroid['area [m2]'] = 0.5 * base_width * height
             self.centroid['x [m]'] = base_width / 3.0
@@ -194,11 +275,14 @@ class RightTriangleLeft(TwodimensionalShape):
 
             self.product_inertia['I_xc_yc [m4]'] = (-(base_width**2.0)*(height**2.0))/72.0
             self.product_inertia['I_x_y [m4]'] = ((base_width**2.0)*(height**2.0))/24.0
-        except Exception as err:
+
+        except:
+            super(RightTriangleLeft, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 TRIANGLEGENERIC = {
     'base_full_width':{'type': 'float','min_value':0.0,'max_value':None},
@@ -250,12 +334,63 @@ class TriangleGeneric(TwodimensionalShape):
 
     """
 
-    @ValidationDecorator(TRIANGLEGENERIC)
-    def __init__(self, base_full_width, base_offset, height, fail_silently=True,**kwargs):
-        try:
-            validate_float('base_offset',base_offset,min_value=0.0,max_value=base_full_width)
+    def __init__(self, base_full_width, base_offset, height, fail_silently=True):
 
-            super(TriangleGeneric, self).__init__()
+        self._base_full_width = base_full_width
+        self._base_offset = base_offset
+        self._height = height
+        self._fail_silently = fail_silently
+
+        self.calculate()
+
+    @property
+    def base_full_width(self):
+        return self._base_full_width
+
+    @base_full_width.setter
+    def base_full_width(self, value):
+        self._base_full_width = value
+        if value: self.calculate()
+
+    @property
+    def base_offset(self):
+        return self._base_offset
+
+    @base_offset.setter
+    def base_offset(self, value):
+        self._base_offset = value
+        if value: self.calculate()
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._base_full_width, self._base_offset, self.height, fail_silently=self._fail_silently)
+
+    @ValidationDecorator(TRIANGLEGENERIC)
+    def calculate_validated(self, base_full_width, base_offset, height, fail_silently=True,**kwargs):
+
+        super(TriangleGeneric, self).__init__()
+
+        try:
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
+            validate_float('base_offset',base_offset,min_value=0.0,max_value=base_full_width)
 
             self.centroid['area [m2]'] = 0.5 * base_full_width * height
             self.centroid['x [m]'] = (base_full_width + base_offset) / 3.0
@@ -277,11 +412,12 @@ class TriangleGeneric(TwodimensionalShape):
             self.product_inertia['I_x_y [m4]'] = (base_full_width*(height**2.0)*(2.0*base_offset + base_full_width))/24.0
 
         except Exception as err:
+            super(TriangleGeneric, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
                 raise ValueError(str(err))
-
 
 RECTANGLE = {
     'base_width':{'type': 'float','min_value':0.0,'max_value':None},
@@ -335,11 +471,49 @@ class Rectangle(TwodimensionalShape):
 
     """
 
+    def __init__(self, base_width, height, fail_silently=True):
+        self._base_width = base_width
+        self._height = height
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def base_width(self):
+        return self._base_width
+
+    @base_width.setter
+    def base_width(self, value):
+        self._base_width = value
+        if value: self.calculate()
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._base_width, self._height, fail_silently=self._fail_silently)
+
     @ValidationDecorator(RECTANGLE)
-    def __init__(self, base_width, height, fail_silently=True, **kwargs):
+    def calculate_validated(self, base_width, height, fail_silently=True, **kwargs):
+
+        super(Rectangle, self).__init__()
 
         try:
-            super(Rectangle, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             self.centroid['area [m2]'] = base_width * height
             self.centroid['x [m]'] = base_width / 2.0
@@ -360,11 +534,13 @@ class Rectangle(TwodimensionalShape):
             self.product_inertia['I_xc_yc [m4]'] = 0.0
             self.product_inertia['I_x_y [m4]'] = ((base_width**2.0)*(height**2.0))/4.0
 
-        except Exception as err:
+        except:
+            super(Rectangle, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 TRAPEZOID = {
     'longest_base':{'type': 'float','min_value':0.0,'max_value':None},
@@ -402,13 +578,62 @@ class Trapezoid(TwodimensionalShape):
 
     """
 
+    def __init__(self, longest_base, shortest_base, height, fail_silently=True):
+        self._longest_base = longest_base
+        self._shortest_base = shortest_base
+        self._height = height
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def longest_base(self):
+        return self._longest_base
+
+    @longest_base.setter
+    def longest_base(self, value):
+        self._longest_base = value
+        if value: self.calculate()
+
+    @property
+    def shortest_base(self):
+        return self._shortest_base
+
+    @shortest_base.setter
+    def shortest_base(self, value):
+        self._shortest_base = value
+        if value: self.calculate()
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._longest_base, self._shortest_base, self._height, fail_silently=self._fail_silently)
+
     @ValidationDecorator(TRAPEZOID)
-    def __init__(self, longest_base, shortest_base, height, fail_silently=True, **kwargs):
+    def calculate_validated(self, longest_base, shortest_base, height, fail_silently=True, **kwargs):
+
+        super(Trapezoid, self).__init__()
 
         try:
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
             validate_float('shortest_base',shortest_base,min_value=0.0,max_value=longest_base)
 
-            super(Trapezoid, self).__init__()
 
             self.centroid['area [m2]'] = 0.5 * height * (longest_base + shortest_base)
             self.centroid['y [m]'] = (height * (2.0*shortest_base + longest_base))/(3.0*(shortest_base + longest_base))
@@ -426,17 +651,20 @@ class Trapezoid(TwodimensionalShape):
             self.radius_gyration['r_x [m]'] = np.sqrt(((height**2.0)*(3.0*shortest_base + longest_base))/
                                                       (6.0 * (longest_base + shortest_base)))
 
-        except Exception as err:
+        except:
+            super(Trapezoid, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 PARALLELLOGRAM = {
     'length_x':{'type': 'float','min_value':0.0,'max_value':None},
     'length_inclined':{'type': 'float','min_value':0.0,'max_value':None},
     'angle':{'type': 'float','min_value':0.0,'max_value':90.0},
 }
+
 class Parallellogram(TwodimensionalShape):
     """
     Represents a parallellogram with one side aligned with the x-axis (see figure). Derived geometrical properties are calculated upon object creation.
@@ -479,11 +707,59 @@ class Parallellogram(TwodimensionalShape):
 
     """
 
+    def __init__(self, length_x, length_inclined, angle, fail_silently=True):
+        self._length_x = length_x
+        self._length_inclined = length_inclined
+        self._angle = angle
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def length_x(self):
+        return self._length_x
+
+    @length_x.setter
+    def length_x(self, value):
+        self._length_x = value
+        if value: self.calculate()
+
+    @property
+    def length_inclined(self):
+        return self._length_inclined
+
+    @length_inclined.setter
+    def length_inclined(self, value):
+        self._length_inclined = value
+        if value: self.calculate()
+
+    @property
+    def angle(self):
+        return self._angle
+
+    @angle.setter
+    def angle(self, value):
+        self._angle = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._length_x, self._length_inclined, self._angle, fail_silently=self._fail_silently)
+
     @ValidationDecorator(PARALLELLOGRAM)
-    def __init__(self, length_x, length_inclined, angle, fail_silently=True, **kwargs):
+    def calculate_validated(self, length_x, length_inclined, angle, fail_silently=True, **kwargs):
+
+        super(Parallellogram, self).__init__()
 
         try:
-            super(Parallellogram, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             theta = np.deg2rad(angle)
 
@@ -509,12 +785,13 @@ class Parallellogram(TwodimensionalShape):
 
             self.product_inertia['I_xc_yc [m4]'] = ((length_inclined**3.0)*length_x*((np.sin(theta))**2.0)*(np.cos(theta)))/12.0
 
-        except Exception as err:
+        except:
+            super(Parallellogram, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
-
+                raise
 
 CIRCLE = {
     'radius':{'type': 'float','min_value':0.0,'max_value':None},
@@ -566,11 +843,39 @@ class Circle(TwodimensionalShape):
 
     """
 
+    def __init__(self, radius, fail_silently=True):
+        self._radius = radius
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def radius(self):
+        return self._radius
+
+    @radius.setter
+    def radius(self, value):
+        self._radius = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._radius, fail_silently=self._fail_silently)
+
     @ValidationDecorator(CIRCLE)
-    def __init__(self, radius, fail_silently=True, **kwargs):
+    def calculate_validated(self, radius, fail_silently=True, **kwargs):
+
+        super(Circle, self).__init__()
 
         try:
-            super(Circle, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             self.centroid['area [m2]'] = np.pi * (radius**2.0)
             self.centroid['x [m]'] = radius
@@ -591,11 +896,13 @@ class Circle(TwodimensionalShape):
             self.product_inertia['I_xc_yc [m4]'] = 0.0
             self.product_inertia['I_x_y [m4]'] = (radius**4.0)* np.pi
 
-        except Exception as err:
+        except:
+            super(Circle, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 RING = {
     'outer_radius':{'type': 'float','min_value':0.0,'max_value':None},
@@ -649,13 +956,51 @@ class Ring(TwodimensionalShape):
 
     """
 
+    def __init__(self, outer_radius, inner_radius, fail_silently=True):
+        self._outer_radius = outer_radius
+        self._inner_radius = inner_radius
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def outer_radius(self):
+        return self._outer_radius
+
+    @outer_radius.setter
+    def outer_radius(self, value):
+        self._outer_radius = value
+        if value: self.calculate()
+
+    @property
+    def inner_radius(self):
+        return self._inner_radius
+
+    @inner_radius.setter
+    def inner_radius(self, value):
+        self._inner_radius = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._outer_radius, self._inner_radius, fail_silently=self._fail_silently)
+
     @ValidationDecorator(RING)
-    def __init__(self, outer_radius, inner_radius, fail_silently=True, **kwargs):
+    def calculate_validated(self, outer_radius, inner_radius, fail_silently=True, **kwargs):
+
+        super(Ring, self).__init__()
 
         try:
-            validate_float('inner_radius', inner_radius, min_value=0.0, max_value=outer_radius)
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
-            super(Ring, self).__init__()
+            validate_float('inner_radius', inner_radius, min_value=0.0, max_value=outer_radius)
 
             self.centroid['area [m2]'] = np.pi * (outer_radius**2.0 - inner_radius**2.0)
             self.centroid['x [m]'] = outer_radius
@@ -680,11 +1025,13 @@ class Ring(TwodimensionalShape):
             self.product_inertia['I_xc_yc [m4]'] = 0.0
             self.product_inertia['I_x_y [m4]'] = np.pi * (outer_radius**2.0) * (outer_radius**2.0 - inner_radius**2.0)
 
-        except Exception as err:
+        except:
+            super(Ring, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 SEMICIRCLE = {
     'radius':{'type': 'float','min_value':0.0,'max_value':None},
@@ -732,11 +1079,39 @@ class SemiCircle(TwodimensionalShape):
 
     """
 
+    def __init__(self, radius, fail_silently=True):
+        self._radius = radius
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def radius(self):
+        return self._radius
+
+    @radius.setter
+    def radius(self, value):
+        self._radius = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._radius, fail_silently=self._fail_silently)
+
     @ValidationDecorator(SEMICIRCLE)
-    def __init__(self, radius, fail_silently=True, **kwargs):
+    def calculate_validated(self, radius, fail_silently=True, **kwargs):
+
+        super(SemiCircle, self).__init__()
 
         try:
-            super(SemiCircle, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             self.centroid['area [m2]'] = 0.5 * np.pi * (radius**2.0)
             self.centroid['x [m]'] = radius
@@ -755,11 +1130,13 @@ class SemiCircle(TwodimensionalShape):
             self.product_inertia['I_xc_yc [m4]'] = 0.0
             self.product_inertia['I_x_y [m4]'] = (2.0 * (radius**2.0)/ 3.0)
 
-        except Exception as err:
+        except:
+            super(SemiCircle, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 CIRCLESECTOR = {
     'radius':{'type': 'float','min_value':0.0,'max_value':None},
@@ -801,11 +1178,49 @@ class CircleSector(TwodimensionalShape):
 
     """
 
+    def __init__(self, radius, angle, fail_silently=True):
+        self._radius = radius
+        self._angle = angle
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def radius(self):
+        return self._radius
+
+    @radius.setter
+    def radius(self, value):
+        self._radius = value
+        if value: self.calculate()
+
+    @property
+    def angle(self):
+        return self._angle
+
+    @angle.setter
+    def angle(self, value):
+        self._angle = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._radius, self._angle, fail_silently=self._fail_silently)
+
     @ValidationDecorator(CIRCLESECTOR)
-    def __init__(self, radius, angle, fail_silently=True, **kwargs):
+    def calculate_validated(self, radius, angle, fail_silently=True, **kwargs):
+
+        super(CircleSector, self).__init__()
 
         try:
-            super(CircleSector, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             theta = np.deg2rad(angle)
 
@@ -822,11 +1237,13 @@ class CircleSector(TwodimensionalShape):
             self.product_inertia['I_xc_yc [m4]'] = 0.0
             self.product_inertia['I_x_y [m4]'] = 0.0
 
-        except Exception as err:
+        except:
+            super(CircleSector, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 CIRCLESEGMENT = {
     'radius':{'type': 'float','min_value':0.0,'max_value':None},
@@ -867,11 +1284,49 @@ class CircleSegment(TwodimensionalShape):
 
     """
 
+    def __init__(self, radius, angle, fail_silently=True):
+        self._radius = radius
+        self._angle = angle
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def radius(self):
+        return self._radius
+
+    @radius.setter
+    def radius(self, value):
+        self._radius = value
+        if value: self.calculate()
+
+    @property
+    def angle(self):
+        return self._angle
+
+    @angle.setter
+    def angle(self, value):
+        self._angle = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._radius, self._angle, fail_silently=self._fail_silently)
+
     @ValidationDecorator(CIRCLESEGMENT)
-    def __init__(self, radius, angle, fail_silently=True, **kwargs):
+    def calculate_validated(self, radius, angle, fail_silently=True, **kwargs):
+
+        super(CircleSegment, self).__init__()
 
         try:
-            super(CircleSegment, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             theta = np.deg2rad(angle)
 
@@ -895,11 +1350,13 @@ class CircleSegment(TwodimensionalShape):
             self.product_inertia['I_xc_yc [m4]'] = 0.0
             self.product_inertia['I_x_y [m4]'] = 0.0
 
-        except Exception as err:
+        except:
+            super(CircleSegment, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 PARABOLA = {
     'width':{'type': 'float','min_value':0.0,'max_value':None},
@@ -949,11 +1406,49 @@ class Parabola(TwodimensionalShape):
 
     """
 
+    def __init__(self, width, height, fail_silently=True):
+        self._width = width
+        self._height = height
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        self._width = value
+        if value: self.calculate()
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._width, self._height, fail_silently=self._fail_silently)
+
     @ValidationDecorator(PARABOLA)
-    def __init__(self, width, height, fail_silently=True, **kwargs):
+    def calculate_validated(self, width, height, fail_silently=True, **kwargs):
+
+        super(Parabola, self).__init__()
 
         try:
-            super(Parabola, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             self.centroid['area [m2]'] = (4.0 * width * height) / 3.0
             self.centroid['x [m]'] = (3.0 * width) / 5.0
@@ -972,11 +1467,13 @@ class Parabola(TwodimensionalShape):
             self.product_inertia['I_xc_yc [m4]'] = 0.0
             self.product_inertia['I_x_y [m4]'] = 0.0
 
-        except Exception as err:
+        except:
+            super(Parabola, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 HALFPARABOLA = {
     'width':{'type': 'float','min_value':0.0,'max_value':None},
@@ -1014,11 +1511,49 @@ class HalfParabola(TwodimensionalShape):
 
     """
 
+    def __init__(self, width, height, fail_silently=True):
+        self._width = width
+        self._height = height
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        self._width = value
+        if value: self.calculate()
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._width, self._height, fail_silently=self._fail_silently)
+
     @ValidationDecorator(HALFPARABOLA)
-    def __init__(self, width, height, fail_silently=True, **kwargs):
+    def calculate_validated(self, width, height, fail_silently=True, **kwargs):
+
+        super(HalfParabola, self).__init__()
 
         try:
-            super(HalfParabola, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             self.centroid['area [m2]'] = (2.0 * width * height) / 3.0
             self.centroid['x [m]'] = (3.0 * width) / 5.0
@@ -1030,11 +1565,13 @@ class HalfParabola(TwodimensionalShape):
             self.radius_gyration['r_x [m]'] = np.sqrt((height**2.0)/5.0)
             self.radius_gyration['r_y [m]'] = np.sqrt((3.0 * (width**2.0))/7.0)
 
-        except Exception as err:
+        except:
+            super(HalfParabola, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 NDEGREEPARABOLAOUTSIDE = {
     'width':{'type': 'float','min_value':0.0,'max_value':None},
@@ -1076,11 +1613,59 @@ class NDegreeParabolaOutside(TwodimensionalShape):
 
     """
 
+    def __init__(self, width, height, exponent, fail_silently=True):
+        self._width = width
+        self._height = height
+        self._exponent = exponent
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        self._width = value
+        if value: self.calculate()
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        if value: self.calculate()
+
+    @property
+    def exponent(self):
+        return self._exponent
+
+    @exponent.setter
+    def exponent(self, value):
+        self._exponent = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._width, self._height, self._exponent, fail_silently=self._fail_silently)
+
     @ValidationDecorator(NDEGREEPARABOLAOUTSIDE)
-    def __init__(self, width, height, exponent, fail_silently=True, **kwargs):
+    def calculate_validated(self, width, height, exponent, fail_silently=True, **kwargs):
+
+        super(NDegreeParabolaOutside, self).__init__()
 
         try:
-            super(NDegreeParabolaOutside, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             self.centroid['area [m2]'] = (width * height) / (exponent + 1.0)
             self.centroid['x [m]'] = width * ((exponent + 1.0) / (exponent + 2.0))
@@ -1092,11 +1677,13 @@ class NDegreeParabolaOutside(TwodimensionalShape):
             self.radius_gyration['r_x [m]'] = np.sqrt(((height**2.0)*(exponent + 1.0))/(3.0 * (3.0 * exponent + 1.0)))
             self.radius_gyration['r_y [m]'] = np.sqrt((width**2.0)*((exponent + 1.0)/(exponent + 3.0)))
 
-        except Exception as err:
+        except:
+            super(NDegreeParabolaOutside, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise
 
 NDEGREEPARABOLAINSIDE = {
     'width':{'type': 'float','min_value':0.0,'max_value':None},
@@ -1138,11 +1725,59 @@ class NDegreeParabolaInside(TwodimensionalShape):
 
     """
 
+    def __init__(self, width, height, exponent, fail_silently=True):
+        self._width = width
+        self._height = height
+        self._exponent = exponent
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def width(self):
+        return self._width
+
+    @width.setter
+    def width(self, value):
+        self._width = value
+        if value: self.calculate()
+
+    @property
+    def height(self):
+        return self._height
+
+    @height.setter
+    def height(self, value):
+        self._height = value
+        if value: self.calculate()
+
+    @property
+    def exponent(self):
+        return self._exponent
+
+    @exponent.setter
+    def exponent(self, value):
+        self._exponent = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._width, self._height, self._exponent, fail_silently=self._fail_silently)
+
     @ValidationDecorator(NDEGREEPARABOLAINSIDE)
-    def __init__(self, width, height, exponent, fail_silently=True, **kwargs):
+    def calculate_validated(self, width, height, exponent, fail_silently=True, **kwargs):
+
+        super(NDegreeParabolaInside, self).__init__()
 
         try:
-            super(NDegreeParabolaInside, self).__init__()
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
             self.centroid['area [m2]'] = ((exponent) / (exponent + 1.0)) * (width * height)
             self.centroid['x [m]'] = width * ((exponent + 1.0) / (2.0 * exponent + 1.0))
@@ -1154,8 +1789,10 @@ class NDegreeParabolaInside(TwodimensionalShape):
             self.radius_gyration['r_x [m]'] = np.sqrt((height**2.0)*((exponent + 1.0))/(3.0 * (exponent + 1.0)))
             self.radius_gyration['r_y [m]'] = np.sqrt((width**2.0)*((exponent + 1.0)/(3.0 * exponent + 1.0)))
 
-        except Exception as err:
+        except:
+            super(NDegreeParabolaInside, self).__init__()
+
             if fail_silently or fail_silently is None:
                 pass
             else:
-                raise ValueError(str(err))
+                raise

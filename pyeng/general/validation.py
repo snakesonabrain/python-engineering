@@ -219,7 +219,8 @@ class ValidationDecorator(object):
         @wraps(fn)
         def decorated(*args, **kwargs):
             validated = True
-            errorstring = None
+            errorstring = ""
+
             try:
                 validate = kwargs['validate']
             except:
@@ -260,12 +261,9 @@ class ValidationDecorator(object):
 
                 except Exception as err:
                     validated = False
-                    errorstring = str(err)
+                    errorstring += str(err)
             else:
                 pass  # No validation
-
-            # if not validated:
-            #     raise ValueError("Error during function validation, %s" % errorstring)
 
             return fn(*args, validated=validated, errorstring=errorstring, **kwargs)
 

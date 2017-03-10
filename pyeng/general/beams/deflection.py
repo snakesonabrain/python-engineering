@@ -88,19 +88,110 @@ class BeamPointLoad(object):
     References - Wikipedia: https://en.wikipedia.org/wiki/Deflection_(engineering)
 
     """
-    @ValidationDecorator(BEAMPOINTLOAD_VALIDATORS)
+
     def __init__(self, beam_length,youngs_modulus,moment_inertia,point_load,load_xmax=0.0,
+                 supporttype_left="Support",supporttype_right="Support",seed=50, fail_silently=True):
+        self._beam_length = beam_length
+        self._youngs_modulus = youngs_modulus
+        self._moment_inertia = moment_inertia
+        self._point_load = point_load
+        self._load_xmax = load_xmax
+        self._supporttype_left = supporttype_left
+        self._supporttype_right = supporttype_right
+        self._seed = seed
+        self._fail_silently = fail_silently
+        self.calculate()
+
+    @property
+    def beam_length(self):
+        return self._beam_length
+
+    @beam_length.setter
+    def beam_length(self, value):
+        self._beam_length = value
+        if value: self.calculate()
+
+    @property
+    def youngs_modulus(self):
+        return self._youngs_modulus
+
+    @youngs_modulus.setter
+    def youngs_modulus(self, value):
+        self._youngs_modulus = value
+        if value: self.calculate()
+
+    @property
+    def moment_inertia(self):
+        return self._moment_inertia
+
+    @moment_inertia.setter
+    def moment_inertia(self, value):
+        self._moment_inertia = value
+        if value: self.calculate()
+
+    @property
+    def point_load(self):
+        return self._point_load
+
+    @point_load.setter
+    def point_load(self, value):
+        self._point_load = value
+        if value: self.calculate()
+
+    @property
+    def load_xmax(self):
+        return self._load_xmax
+
+    @load_xmax.setter
+    def load_xmax(self, value):
+        self._load_xmax = value
+        if value: self.calculate()
+
+    @property
+    def supporttype_left(self):
+        return self._supporttype_left
+
+    @supporttype_left.setter
+    def supporttype_left(self, value):
+        self._supporttype_left = value
+        if value: self.calculate()
+
+    @property
+    def supporttype_right(self):
+        return self._supporttype_right
+
+    @supporttype_right.setter
+    def supporttype_right(self, value):
+        self._supporttype_right = value
+        if value: self.calculate()
+
+    @property
+    def seed(self):
+        return self._seed
+
+    @seed.setter
+    def seed(self, value):
+        self._seed = value
+        if value: self.calculate()
+
+    @property
+    def fail_silently(self):
+        return self._fail_silently
+
+    @fail_silently.setter
+    def fail_silently(self, value):
+        self._fail_silently = value
+
+    def calculate(self):
+        self.calculate_validated(self._beam_length, self._youngs_modulus, self._moment_inertia,
+                                 self._point_load, load_xmax = self._load_xmax,
+                                 supporttype_left = self._supporttype_left, supporttype_right = self._supporttype_right,
+                                 seed = self._seed, fail_silently=self._fail_silently)
+
+    @ValidationDecorator(BEAMPOINTLOAD_VALIDATORS)
+    def calculate_validated(self, beam_length,youngs_modulus,moment_inertia,point_load,load_xmax=0.0,
                  supporttype_left="Support",supporttype_right="Support",seed=50,
                  fail_silently=True,**kwargs):
-
-        self.load_xmax = load_xmax
-        self.beam_length = beam_length
-        self.point_load = point_load
-        self.youngs_modulus = youngs_modulus
-        self.moment_inertia = moment_inertia
-        self.supporttype_left = supporttype_left
-        self.supporttype_right = supporttype_right
-        self.seed = seed
 
         self.reaction_left = np.NaN
         self.slope_left = np.NaN        # Radians!!
@@ -110,145 +201,149 @@ class BeamPointLoad(object):
         self.bending_moment = np.NaN
         self.slope = np.NaN
         self.deflection = np.NaN
-        self.flip = False
+        rigidity = youngs_modulus * moment_inertia
+        flip = False
 
-        self.calculate()
+        try:
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
 
-    def check_cases(self):
-        #region Cases
-        if (self.supporttype_left=="Free" and self.supporttype_right=="Clamped") or \
-                (self.supporttype_left=="Clamped" and self.supporttype_right=="Free"):
+            #region Cases
+            if (supporttype_left=="Free" and supporttype_right=="Clamped") or \
+                    (supporttype_left=="Clamped" and supporttype_right=="Free"):
 
-            if self.supporttype_left=="Clamped":
-                self.flip = True
-                self.a = self.beam_length - self.load_xmax
-            else:
-                self.a = self.load_xmax
+                if supporttype_left=="Clamped":
+                    flip = True
+                    a = beam_length - load_xmax
+                else:
+                    a = load_xmax
 
-            self.reaction_left = 0.0
-            self.moment_left = 0.0
-            self.slope_left = (self.point_load * ((self.beam_length - self.a)**2.0))/(2.0 * self.rigidity)
-            self.deflection_left = (-self.point_load / (6.0 * self.rigidity)) * \
-                                   (2.0*(self.beam_length**3.0) - (3.0 * (self.beam_length**2.0) * self.a) + (self.a**3.0))
+                self.reaction_left = 0.0
+                self.moment_left = 0.0
+                self.slope_left = (point_load * ((beam_length - a)**2.0))/(2.0 * rigidity)
+                self.deflection_left = (-point_load / (6.0 * rigidity)) * \
+                                       (2.0*(beam_length**3.0) - (3.0 * (beam_length**2.0) * a) + (a**3.0))
 
-        if (self.supporttype_left=="Support" and self.supporttype_right=="Clamped") or \
-                (self.supporttype_left=="Clamped" and self.supporttype_right=="Support"):
+            if (supporttype_left=="Support" and supporttype_right=="Clamped") or \
+                    (supporttype_left=="Clamped" and supporttype_right=="Support"):
 
-            if self.supporttype_left=="Clamped":
-                self.flip = True
-                self.a = self.beam_length - self.load_xmax
-            else:
-                self.a = self.load_xmax
+                if supporttype_left=="Clamped":
+                    flip = True
+                    a = beam_length - load_xmax
+                else:
+                    a = load_xmax
 
-            self.reaction_left = (self.point_load/(2.0*(self.beam_length**3.0)))*\
-                                 ((self.beam_length-self.a)**2.0)*\
-                                 (2.0*self.beam_length+self.a)
-            self.moment_left = 0.0
-            self.slope_left = ((-self.point_load*self.a)/(4.0*self.rigidity*self.beam_length))*\
-                              ((self.beam_length-self.a)**2.0)
-            self.deflection_left = 0.0
+                self.reaction_left = (point_load/(2.0*(beam_length**3.0)))*\
+                                     ((beam_length-a)**2.0)*\
+                                     (2.0*beam_length+a)
+                self.moment_left = 0.0
+                self.slope_left = ((-point_load*a)/(4.0*rigidity*beam_length))*\
+                                  ((beam_length-a)**2.0)
+                self.deflection_left = 0.0
 
-        if (self.supporttype_left == "Guided" and self.supporttype_right == "Clamped") or \
-                (self.supporttype_left == "Clamped" and self.supporttype_right == "Guided"):
+            if (supporttype_left == "Guided" and supporttype_right == "Clamped") or \
+                    (supporttype_left == "Clamped" and supporttype_right == "Guided"):
 
-            if self.supporttype_left == "Clamped":
-                self.flip = True
-                self.a = self.beam_length - self.load_xmax
-            else:
-                self.a = self.load_xmax
+                if supporttype_left == "Clamped":
+                    flip = True
+                    a = beam_length - load_xmax
+                else:
+                    a = load_xmax
 
-            self.reaction_left = 0.0
-            self.moment_left = (self.point_load * ((self.beam_length - self.a) ** 2.0)) / \
-                               (2.0 * self.beam_length)
-            self.slope_left = 0.0
-            self.deflection_left = (-self.point_load / (12.0 * self.rigidity)) * \
-                                   ((self.beam_length - self.a) ** 2.0) * \
-                                   (self.beam_length + 2.0 * self.a)
+                self.reaction_left = 0.0
+                self.moment_left = (point_load * ((beam_length - a) ** 2.0)) / \
+                                   (2.0 * beam_length)
+                self.slope_left = 0.0
+                self.deflection_left = (-point_load / (12.0 * rigidity)) * \
+                                       ((beam_length - a) ** 2.0) * \
+                                       (beam_length + 2.0 * a)
 
-        if self.supporttype_left == "Clamped" and self.supporttype_right == "Clamped":
+            if supporttype_left == "Clamped" and supporttype_right == "Clamped":
 
-            self.a = self.load_xmax
+                a = load_xmax
 
-            self.reaction_left = (self.point_load / (self.beam_length ** 3.0)) * \
-                                 ((self.beam_length - self.a) ** 2.0) * \
-                                 (self.beam_length + 2.0*self.a)
-            self.moment_left = ((-self.point_load * self.a) / (self.beam_length ** 2.0)) * \
-                               ((self.beam_length - self.a) ** 2.0)
-            self.slope_left = 0.0
-            self.deflection_left = 0.0
+                self.reaction_left = (point_load / (beam_length ** 3.0)) * \
+                                     ((beam_length - a) ** 2.0) * \
+                                     (beam_length + 2.0*a)
+                self.moment_left = ((-point_load * a) / (beam_length ** 2.0)) * \
+                                   ((beam_length - a) ** 2.0)
+                self.slope_left = 0.0
+                self.deflection_left = 0.0
 
-        if self.supporttype_left == "Support" and self.supporttype_right == "Support":
+            if supporttype_left == "Support" and supporttype_right == "Support":
 
-            self.a = self.load_xmax
+                a = load_xmax
 
-            self.reaction_left = (self.point_load / self.beam_length) * (self.beam_length - self.a)
-            self.moment_left = 0.0
-            self.slope_left = ((-self.point_load * self.a) / (6.0 * self.rigidity * self.beam_length)) * \
-                              (2.0 * self.beam_length - self.a) * \
-                              (self.beam_length - self.a)
-            self.deflection_left = 0.0
+                self.reaction_left = (point_load / beam_length) * (beam_length - a)
+                self.moment_left = 0.0
+                self.slope_left = ((-point_load * a) / (6.0 * rigidity * beam_length)) * \
+                                  (2.0 * beam_length - a) * \
+                                  (beam_length - a)
+                self.deflection_left = 0.0
 
-        if (self.supporttype_left == "Guided" and self.supporttype_right == "Support") or \
-                (self.supporttype_left == "Support" and self.supporttype_right == "Guided"):
+            if (supporttype_left == "Guided" and supporttype_right == "Support") or \
+                    (supporttype_left == "Support" and supporttype_right == "Guided"):
 
-            if self.supporttype_left == "Support":
-                self.flip = True
-                self.a = self.beam_length - self.load_xmax
-            else:
-                self.a = self.load_xmax
+                if supporttype_left == "Support":
+                    flip = True
+                    a = beam_length - load_xmax
+                else:
+                    a = load_xmax
 
-            self.reaction_left = 0.0
-            self.moment_left = self.point_load * (self.beam_length - self.a)
-            self.slope_left = 0.0
-            self.deflection_left = ((-self.point_load * (self.beam_length - self.a)) / (6.0 * self.rigidity)) * \
-                                   (2.0 * (self.beam_length ** 2.0) + 2.0 * self.a * self.beam_length -
-                                    (self.a ** 2.0))
+                self.reaction_left = 0.0
+                self.moment_left = point_load * (beam_length - a)
+                self.slope_left = 0.0
+                self.deflection_left = ((-point_load * (beam_length - a)) / (6.0 * rigidity)) * \
+                                       (2.0 * (beam_length ** 2.0) + 2.0 * a * beam_length -
+                                        (a ** 2.0))
 
-    def calculate(self):
-        self.rigidity = self.youngs_modulus * self.moment_inertia
-        self.x = np.linspace(0.0, self.beam_length, self.seed)
-        self.check_cases()
-        self.calculate_multiplier()
-        self.calculate_shearforce()
-        self.calculate_bendingmoment()
-        self.calculate_slope()
-        self.calculate_deflection()
+            self.x = np.linspace(0.0, beam_length, seed)
 
-    def calculate_multiplier(self):
-        self.multiplier = np.piecewise(self.x, [self.x < self.a, self.x >= self.a], [0, 1.0])
+            self.multiplier = np.piecewise(self.x, [self.x < a, self.x >= a], [0, 1.0])
 
-    def calculate_shearforce(self):
-        self.shear_force = list(map(lambda mult: self.reaction_left - self.point_load*(mult**0.0),
-                                    self.multiplier))
-        if self.flip:
-            self.shear_force = np.flipud(self.shear_force)
-
-    def calculate_bendingmoment(self):
-        self.bending_moment =  list(map(lambda x, mult: self.moment_left +
-                                                        self.reaction_left*x -
-                                                        self.point_load*mult*(x - self.a),
-                                        self.x,
+            self.shear_force = list(map(lambda mult: self.reaction_left - point_load*(mult**0.0),
                                         self.multiplier))
-        if self.flip:
-            self.bending_moment = np.flipud(self.bending_moment)
+            if flip:
+                self.shear_force = np.flipud(self.shear_force)
 
-    def calculate_slope(self):
-        self.slope = list(map(lambda x,mult: self.slope_left +
-                                             (self.moment_left * x / self.rigidity) +
-                                             ((self.reaction_left * (x ** 2.0)) / (2.0 * self.rigidity)) -
-                                             ((self.point_load * ((mult*(x - self.a)) ** 2.0)) / (2.0 * self.rigidity)),
-                        self.x,
-                        self.multiplier))
-        if self.flip:
-            self.slope = np.flipud(self.slope)
+            self.bending_moment =  list(map(lambda x, mult: self.moment_left +
+                                                            self.reaction_left*x -
+                                                            point_load*mult*(x - a),
+                                            self.x,
+                                            self.multiplier))
+            if flip:
+                self.bending_moment = np.flipud(self.bending_moment)
 
-    def calculate_deflection(self):
-        self.deflection = list(map(lambda x, mult: self.deflection_left +
-                                                   (self.slope_left*x) +
-                                                   ((self.moment_left*(x**2.0))/(2.0*self.rigidity)) +
-                                                   ((self.reaction_left * (x**3.0))/(6.0 * self.rigidity)) -
-                                                   ((self.point_load*((mult*(x - self.a))**3.0))/(6.0 * self.rigidity)),
-                                   self.x,
-                                   self.multiplier))
-        if self.flip:
-            self.deflection = np.flipud(self.deflection)
+            self.slope = list(map(lambda x,mult: self.slope_left +
+                                                 (self.moment_left * x / rigidity) +
+                                                 ((self.reaction_left * (x ** 2.0)) / (2.0 * rigidity)) -
+                                                 ((point_load * ((mult*(x - a)) ** 2.0)) / (2.0 * rigidity)),
+                            self.x,
+                            self.multiplier))
+            if flip:
+                self.slope = np.flipud(self.slope)
+
+            self.deflection = list(map(lambda x, mult: self.deflection_left +
+                                                       (self.slope_left*x) +
+                                                       ((self.moment_left*(x**2.0))/(2.0*rigidity)) +
+                                                       ((self.reaction_left * (x**3.0))/(6.0 * rigidity)) -
+                                                       ((point_load*((mult*(x - a))**3.0))/(6.0 * rigidity)),
+                                       self.x,
+                                       self.multiplier))
+            if flip:
+                self.deflection = np.flipud(self.deflection)
+
+        except:
+            self.reaction_left = np.NaN
+            self.slope_left = np.NaN  # Radians!!
+            self.moment_left = np.NaN
+            self.deflection_left = np.NaN
+            self.shear_force = np.NaN
+            self.bending_moment = np.NaN
+            self.slope = np.NaN
+            self.deflection = np.NaN
+
+            if fail_silently or fail_silently is None:
+                print("Error raised but silenced")
+            else:
+                raise

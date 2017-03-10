@@ -246,12 +246,19 @@ class Test_validate(unittest.TestCase):
     def setUp(self):
         @ValidationDecorator(VALIDATION_DATA)
         def test_validated_func(a, b, c=1.0, d=[], **kwargs):
+
+            if not kwargs['validated']:
+                raise ValueError("Error during function validation: %s" % kwargs['errorstring'])
+
             return True
         self.test_validated_func = test_validated_func
 
         @ValidationDecorator(VALIDATION_DATA)
         def test_fail_silentfunc(a, b, c=1.0, d=[], fail_silently=True, **kwargs):
             try:
+                if not kwargs['validated']:
+                    raise ValueError("Error during function validation: %s" % kwargs['errorstring'])
+
                 errorval = 1.0 / 0.0
             except Exception as err:
                 if fail_silently or fail_silently is None:

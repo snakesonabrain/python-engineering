@@ -40,6 +40,9 @@ def plasticity_chart(liquid_limit, plasticity_index, fail_silently=True, **kwarg
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         if liquid_limit < 20.0:
             aline_PI = 0.0
         else:
@@ -66,11 +69,11 @@ def plasticity_chart(liquid_limit, plasticity_index, fail_silently=True, **kwarg
             'aline_PI [%]': aline_PI,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'classification [-]': None,
                 'aline_PI [%]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise

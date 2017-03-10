@@ -54,12 +54,7 @@ class TestBeamPointLoad(unittest.TestCase):
                                               load_xmax=0.6,
                                               supporttype_left="Clamped",
                                               supporttype_right="Free")
-        self.assertEqual(beam_left.a,beam_right.a)
-        beam_left.calculate_deflection()
-        beam_right.calculate_deflection()
         self.assertAlmostEqual(beam_right.deflection[-1],beam_left.deflection[0],5)
-        beam_left.calculate_slope()
-        beam_right.calculate_slope()
         self.assertAlmostEqual(beam_right.slope[-1],beam_left.slope[0])
 
     def test_beam_guided_clamped(self):

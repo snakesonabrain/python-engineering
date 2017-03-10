@@ -58,6 +58,9 @@ def consolidation_drainage_janbu(time, consolidation_coefficient, drainage_path_
 
     try:
 
+        if not kwargs['validated']:
+            raise ValueError("Error during function validation, %s" % kwargs['errorstring'])
+
         # Calculation statements
         time_factor = ((consolidation_coefficient / (365.0 * 24.0 * 3600.0)) * time) / (drainage_path_length ** 2.0)
 
@@ -135,11 +138,11 @@ def consolidation_drainage_janbu(time, consolidation_coefficient, drainage_path_
             'time_factor [-]': time_factor,
         }
 
-    except Exception as err:
+    except:
         if fail_silently or fail_silently is None:
             return {
                 'consolidation_degree [%]': np.NaN,
                 'time_factor [-]': np.NaN,
             }
         else:
-            raise ValueError(str(err))
+            raise
