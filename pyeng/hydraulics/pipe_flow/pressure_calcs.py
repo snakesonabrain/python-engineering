@@ -51,12 +51,12 @@ def pressuredrop_relativeroughness_moody(reynolds_number, pipe_diameter, pipe_ma
 
         \\text{Laminar flow:} \\quad f_D = \\frac{64}{Re}
 
-    :returns:   Darcy Weissbach friction factor (:math:`f_D`) [:math:`-`], Pipe roughness (:math:`\\epsilon`) [:math:`mm`], Head loss (:math:`h_f`) [:math:`m`], Pressure drop (:math:`\\Delta P`) [:math:`Pa`], Flow regime (:math:``) [:math:`-`], Friction factor for laminar flow (:math:`f_{d,laminar}`) [:math:`-`], Friction factor for fully turbulent flow (:math:`f_{d,turbulent}`) [:math:`-`]
+    :returns:   Darcy Weissbach friction factor (:math:`f_D`) [-], Pipe roughness (:math:`\\epsilon`) [:math:`mm`], Head loss (:math:`h_f`) [:math:`m`], Pressure drop (:math:`\\Delta P`) [:math:`Pa`], Flow regime [-], Friction factor for laminar flow (:math:`f_{d,laminar}`) [-], Friction factor for fully turbulent flow (:math:`f_{d,turbulent}`) [-]
 
     :rtype: Python dictionary with keys ['friction_factor [-]','roughness [mm]','head_loss [m]','pressure_drop [Pa]','flow_regime [-]','friction_factor_laminar [-]','friction_factor_turbulent [-]']
 
 
-    .. figure:: images\\Moody_diagram_matplotlib.png
+    .. figure:: images/Moody_diagram_matplotlib.png
         :figwidth: 500
         :width: 400
         :align: center

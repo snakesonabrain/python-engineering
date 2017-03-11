@@ -2,7 +2,7 @@ Golden rules for python-engineering functions
 ===============================================
 
 python-engineering is developed and maintained based on a set op 10 golden rules.
-These rules are embedded in the proprietary python-engineering function architecture
+These rules are embedded in the python-engineering function architecture
 and should be followed by anyone wishing to contribute to the project. Most of these
 rules are inherently followed if functions are constructed using the python-engineering
 function constructor.
@@ -79,13 +79,13 @@ Good practice:
 
 python-engineering has a tweak which allows the user to override the standard
 validation parameters when calling the function. Adding an additional keyword argument
-with ``__min_value`` or ``__max_value`` appended to the parameter name will override
+with ``__min`` or ``__max`` appended to the parameter name will override
 the validation range.
 For example, if calibration range is [40%, 80%], the function would be called as follows:
 
     .. code-block:: python
 
-        >>>my_correlation(20.0, percentage__min_value=40.0, percentage__max_value=80.0)
+        >>>my_correlation(20.0, percentage__min=40.0, percentage__max=80.0)
         ValueError(percentage (20.0) cannot be smaller than 30.0)
 
 python-engineering allows the user to completely override parameter validation
@@ -246,7 +246,7 @@ that the function returns the expected value or that an error is raised when it 
 --------------------
 
 python-engineering is provided to the engineering community under a Creative Commons 4.0
-non-commercial share-alike license. Any works derived from python-engineering or any functions
+attribution share-alike license. Any works derived from python-engineering or any functions
 created using the python-engineering function constructor should in turn be shared with the
 community. Through the contribution of many engineers, python-engineering can grow to
 become an awesome tool allowing everyone, from student to grey-haired consultant to have
@@ -255,10 +255,9 @@ more confidence in their calcs.
 10. Cool kids play fair
 -----------------------------------
 
-Under the terms of the Creative Commons 4.0 Non-commercial Share-alike license, python-engineering
-can be used for educational purposes. If you plan to use python-engineering in commercial activities or wish
-to include python-engineering in commercial software,
-you should purchase a license. Please consult the license terms if you're unsure whether use
-qualifies as commercial use or not.
+Under the terms of the Creative Commons 4.0 Attribution Share-alike license, python-engineering
+can be used for educational and commercial purposes. However, all derived works should be shared with the community.
+Please consult the license terms for additional details. Please contact the authors if you wish to use the software
+beyond the terms of the license agreement.
 
-We strive to keep the price for commercial license low. Playing fair keeps the commercial license cheap and accessible.
+Playing fair allows knowledge to spread within the community.

@@ -6,7 +6,7 @@ def readme():
         return f.read()
 
 setup(name='python-engineering',
-      version='0.0.1',
+      version='0.0.2',
       description='python-engineering, the ultimate engineering function library',
       long_description=readme(),
       url='https://github.com/snakesonabrain/python-engineering',  # use the URL to the github repo

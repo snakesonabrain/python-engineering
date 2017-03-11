@@ -87,7 +87,7 @@ class RightTriangleRight(TwodimensionalShape):
 
         I_{xy} = \\frac{b^2 h^2}{8}
 
-    .. figure:: images\\RightTriangleRight.PNG
+    .. figure:: images/RightTriangleRight.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -205,7 +205,7 @@ class RightTriangleLeft(TwodimensionalShape):
 
         I_{xy} = \\frac{b^2 h^2}{24}
 
-    .. figure:: images\\RightTriangleLeft.PNG
+    .. figure:: images/RightTriangleLeft.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -325,7 +325,7 @@ class TriangleGeneric(TwodimensionalShape):
 
         I_{xy} = \\frac{b h^2 (2a + b)}{24}
 
-    .. figure:: images\\TriangleGeneric.PNG
+    .. figure:: images/TriangleGeneric.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -462,7 +462,7 @@ class Rectangle(TwodimensionalShape):
 
         I_{xy} = \\frac{b^2  h^2}{4}
 
-    .. figure:: images\\Rectangle.PNG
+    .. figure:: images/Rectangle.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -569,7 +569,7 @@ class Trapezoid(TwodimensionalShape):
 
         r^2_{x} = \\frac{h^2 (3a + b)}{6 (a + b)}
 
-    .. figure:: images\\Trapezoid.PNG
+    .. figure:: images/Trapezoid.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -698,7 +698,7 @@ class Parallellogram(TwodimensionalShape):
 
         I_{x_c y_c} = \\frac{a^3 b \\sin ^2 \\theta \\cos \\theta}{12}
 
-    .. figure:: images\\Parallellogram.PNG
+    .. figure:: images/Parallellogram.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -834,7 +834,7 @@ class Circle(TwodimensionalShape):
 
         I_{xy} = A a^2
 
-    .. figure:: images\\Circle.PNG
+    .. figure:: images/Circle.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -947,7 +947,7 @@ class Ring(TwodimensionalShape):
 
         I_{xy} = \\pi a^2 (a^2 - b^2)
 
-    .. figure:: images\\Ring.PNG
+    .. figure:: images/Ring.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -1070,7 +1070,7 @@ class SemiCircle(TwodimensionalShape):
 
         I_{xy} = \\frac{2 a^2}{3}
 
-    .. figure:: images\\SemiCircle.PNG
+    .. figure:: images/SemiCircle.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -1169,7 +1169,7 @@ class CircleSector(TwodimensionalShape):
 
         I_{xy} = 0
 
-    .. figure:: images\\CircleSector.PNG
+    .. figure:: images/CircleSector.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -1275,7 +1275,7 @@ class CircleSegment(TwodimensionalShape):
 
         I_{xy} = A a^2
 
-    .. figure:: images\\CircleSegment.PNG
+    .. figure:: images/CircleSegment.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -1397,7 +1397,7 @@ class Parabola(TwodimensionalShape):
 
         I_{xy} = 0
 
-    .. figure:: images\\Parabola.PNG
+    .. figure:: images/Parabola.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -1502,7 +1502,7 @@ class HalfParabola(TwodimensionalShape):
 
         r^2_{y} = \\frac{3 a^2}{7}
 
-    .. figure:: images\\HalfParabola.PNG
+    .. figure:: images/HalfParabola.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -1604,7 +1604,7 @@ class NDegreeParabolaOutside(TwodimensionalShape):
 
         y = \\frac{h}{b^n} x^n
 
-    .. figure:: images\\NDegreeParabolaOutside.PNG
+    .. figure:: images/NDegreeParabolaOutside.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -1716,7 +1716,7 @@ class NDegreeParabolaInside(TwodimensionalShape):
 
         y = \\frac{h}{b^{1/n}} x^{1/n}
 
-    .. figure:: images\\NDegreeParabolaInside.PNG
+    .. figure:: images/NDegreeParabolaInside.PNG
         :figwidth: 500
         :width: 400
         :align: center

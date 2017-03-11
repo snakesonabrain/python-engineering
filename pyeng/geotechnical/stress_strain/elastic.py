@@ -46,7 +46,7 @@ def stresses_pointload_boussinesq(point_load, x, y, z, poisson_coefficient=0.3, 
 
     :rtype: Python dictionary with keys ['sigma_z [kPa]','sigma_x [kPa]','sigma_y [kPa]','tau_zx [kPa]','tau_yz [kPa]','tau_xy [kPa]','radius [m]']
 
-    .. figure:: images\\stresses_pointload_boussinesq.PNG
+    .. figure:: images/stresses_pointload_boussinesq.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -134,7 +134,7 @@ def stresses_lineload_boussinesq(line_load, x, z, fail_silently=True, **kwargs):
 
     :rtype: Python dictionary with keys ['sigma_z [kPa]','sigma_x [kPa]','tau_zx [kPa]']
 
-    .. figure:: images\\stresses_lineload_boussinesq.PNG
+    .. figure:: images/stresses_lineload_boussinesq.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -198,7 +198,7 @@ def stresses_striploadconstant_boussinesq(strip_load, load_width, x, z, fail_sil
 
     :rtype: Python dictionary with keys ['sigma_z [kPa]','sigma_x [kPa]','tau_zx [kPa]']
 
-    .. figure:: images\\stresses_striploadconstant_boussinesq.PNG
+    .. figure:: images/stresses_striploadconstant_boussinesq.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -267,7 +267,7 @@ def stresses_striploadtriangular_boussinesq(strip_load_max, load_width, x, z, fa
 
     :rtype: Python dictionary with keys ['sigma_z [kPa]','sigma_x [kPa]','tau_zx [kPa]']
 
-    .. figure:: images\\stresses_striploadtriangular_boussinesq.PNG
+    .. figure:: images/stresses_striploadtriangular_boussinesq.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -340,7 +340,7 @@ def stresses_circle_boussinesq(circle_stress, circle_radius, z, radius=0.0, pois
 
     :rtype: Python dictionary with keys ['sigma_z [kPa]','sigma_r [kPa]','sigma_theta [kPa]']
 
-    .. figure:: images\\stresses_circle_boussinesq.PNG
+    .. figure:: images/stresses_circle_boussinesq.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -849,7 +849,7 @@ def stresses_rectangle_boussinesq(rectangle_stress, rectangle_length, rectangle_
 
     :rtype: Python dictionary with keys ['sigma_z [kPa]','sigma_x [kPa]','sigma_y [kPa]','tau_zx [kPa]']
 
-    .. figure:: images\\stresses_rectangle_boussinesq.PNG
+    .. figure:: images/stresses_rectangle_boussinesq.PNG
         :figwidth: 500
         :width: 400
         :align: center

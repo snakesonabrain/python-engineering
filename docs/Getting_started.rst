@@ -11,7 +11,7 @@ Installation
 
 python-engineering is written for Python 3.x. Downloading Anaconda3 is recommended for users not familiar with Python development.
 
-With a valid installation of Python 3, you can simply install python-engineering using pip
+With a valid installation of Python 3, you can simply install python-engineering using pip.
 
 .. code-block:: bash
 
@@ -54,6 +54,9 @@ by consulting the documentation.
 
 Calling functions
 ___________________
+
+python-engineering functions are called like any other Python function. The documentation provide extensive
+guidance on each function argument, the allowed range or options and units.
 
 python-engineering will always return dictionaries to allow returning multiple outputs from a single
 function in a structured manner. To return an output value, the dictionary key will need to be specified.
@@ -125,13 +128,16 @@ If parameters are outside there applicable ranges, the calculation will not go a
 python-engineering will fail silently, meaning that in case of a validation error, the code will return
 NaN for numerical outputs and None for string outputs. If several function calls are made in a loop,
 the function calls for which the validation executes correctly, will still complete as expected. As an example of
-this, let's call the function for Reynolds numbers ranging from 1e2 to 1e9. The function below
-will return values for all but the first and last Reynolds number, since these two are outside the validation ranges.
+this, let's call the function for Reynolds numbers ranging from 1e2 to 1e9 and plot the results. The function below
+will return values for all but the first and last Reynolds number, since these two are outside the validation ranges,
+this is clearly observed in the plot. Even though validation errors occur, the plot is still generated without problems
+but no values are calculated where the input parameters are out of bounds.
 
 .. code-block:: python
 
     from pyeng.hydraulics.pipe_flow.pressure_calcs import pressuredrop_relativeroughness_moody
     import numpy as np
+    import matplotlib.pyplot as plt
 
     reynolds_numbers = np.logspace(2,9,8) # [1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
     friction_factors = []
@@ -145,3 +151,147 @@ will return values for all but the first and last Reynolds number, since these t
                                                                average_velocity=5.0,
                                                                fluid_density=1050.0)['friction_factor [-]']
         friction_factors.append(friction_factor)
+
+    plt.plot(reynolds_numbers, friction_factors)
+    plt.xscale('log')
+    plt.show()
+
+When numerical results are needed for parameters outside validation ranges, the user has two choices:
+
+    - Switch of validation completely (not recommended)
+    - Expand the validation ranges by specifying additional keyword arguments
+
+For the first option, the function call would look like this:
+
+.. code-block:: python
+
+    from pyeng.hydraulics.pipe_flow.pressure_calcs import pressuredrop_relativeroughness_moody
+
+    pressuredrop_relativeroughness_moody(reynolds_number=1e2,
+                                         pipe_diameter=1.0,
+                                         pipe_material="Water mains,old",
+                                         pipe_length=10.0,
+                                         average_velocity=5.0,
+                                         fluid_density=1050.0,
+                                         validate=False)['friction_factor [-]']
+
+In this case, no validation whatsoever is carried out by adding validate as a keyword argument and setting it to ``False``.
+
+For the second (recommended) option, the code from the validation example would need to look as follows:
+
+.. code-block:: python
+
+    from pyeng.hydraulics.pipe_flow.pressure_calcs import pressuredrop_relativeroughness_moody
+    import numpy as np
+    import matplotlib.pyplot as plt
+
+    reynolds_numbers = np.logspace(2,9,8) # [1e2, 1e3, 1e4, 1e5, 1e6, 1e7, 1e8, 1e9]
+    friction_factors = []
+
+    for re in reynolds_numbers:
+
+        friction_factor = pressuredrop_relativeroughness_moody(reynolds_number=re,
+                                                               pipe_diameter=1.0,
+                                                               pipe_material="Water mains,old",
+                                                               pipe_length=10.0,
+                                                               average_velocity=5.0,
+                                                               fluid_density=1050.0,
+                                                               reynolds_number__min=1e2,
+                                                               reynolds_number__max=1e9)['friction_factor [-]']
+        friction_factors.append(friction_factor)
+
+    plt.plot(reynolds_numbers, friction_factors)
+    plt.xscale('log')
+    plt.show()
+
+The code above will generate a plot containing all reynolds numbers, from 1e2 to 1e9. Adding keyword arguments
+``__min`` and/or ``__max`` to a function argument overrides the validation ranges. Note that overriding of validation ranges
+is only possible for the given function call. Calling the function again without the override would again result in
+the default behaviour.
+
+The behaviour of the function in case of overriding of validation ranges depends on how it is coded.
+The function above works with interpolation and follows the logic of numpy's interp function.
+
+
+Error handling
+____________________
+
+Since python-engineering fails silently by default, the user might not know what is actualy going wrong when a value
+is not returned. After all, not all errors will be validation errors, errors could also be raised during the
+execution of the function itself.
+
+If you want to see what is actually going when a value is not returned and get more details on where the error
+is happening, you can override the default error handling behaviour. You can do this by specifying ``fail_silently=False``
+as an additional keywords argument. This will cause the function to fail with a full traceback of the error.
+
+.. code-block:: python
+
+    from pyeng.hydraulics.pipe_flow.pressure_calcs import pressuredrop_relativeroughness_moody
+
+    pressuredrop_relativeroughness_moody(reynolds_number=1e2,
+                                         pipe_diameter=1.0,
+                                         pipe_material="Water mains,old",
+                                         pipe_length=10.0,
+                                         average_velocity=5.0,
+                                         fluid_density=1050.0,
+                                         fail_silently=False)['friction_factor [-]']
+
+The code above will raise a ValueError indicating the ``reynolds_number=1e2`` is outside allowable bounds. It will also
+say what the allowable minimum is. The function documentation will also provide this information for each input
+parameter.
+
+
+python-engineering class methods
+---------------------------------
+
+For certain calculations, it is more meaningful to uses classes than functions. Sometimes, calculation entities
+need to be persistent throughout the execution of a program. A typical example of this are geometrical shapes.
+Geometrical shapes have multiple atributes which need to be calculated such as area, centroid location, ...
+Creating the geometric shapes as objects allows the necessary flexibility.
+
+Object creation
+________________
+
+When objects are created, the necessary properties need to be specified. As an example, we can create a circle with
+a radius of 1m. When the circle object is created, the derived properties such as area will immediately be calculated.
+We can go ahead and print the circle area.
+
+.. code-block:: python
+
+    from pyeng.general.geometry.geom_2d import Circle
+    my_circle = Circle(radius=1.0)
+    print("Circle area = %.2fm2" % my_circle.centroid['area [m2]'])
+
+Modification of object attributes
+__________________________________
+
+Now that the object my_circle of the Circle class exists, we can change its attributes. This will trigger recalculation.
+If we change the radius of the circle to 2m, we should see the effect on the area.
+
+.. code-block:: python
+
+    from pyeng.general.geometry.geom_2d import Circle
+    my_circle = Circle(radius=1.0)
+    print("Circle area = %.2fm2" % my_circle.centroid['area [m2]'])
+    my_circle.radius = 2.0
+    print("Updated circle area = %.2fm2" % my_circle.centroid['area [m2]'])
+
+Validation and error handling
+_______________________________
+
+The documentation highlights which validation ranges or options are applicable for class attributes. When values are
+outside allowable ranges, the calculation will fail silently, unless ``fail_silently=False`` is specified as an
+additional keyword argument. This is illustrated in the example below:
+
+.. code-block:: python
+
+    # Silent failure, returning np.NaN
+    from pyeng.general.geometry.geom_2d import Circle
+    my_circle = Circle(radius=-1.0)
+    print("Circle area = %.2fm2" % my_circle.centroid['area [m2]'])
+
+.. code-block:: python
+
+    # Failure with error traceback
+    from pyeng.general.geometry.geom_2d import Circle
+    my_circle = Circle(radius=-1.0,fail_silently=False)

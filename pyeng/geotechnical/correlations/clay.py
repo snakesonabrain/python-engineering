@@ -22,7 +22,7 @@ def lateralearthpressure_plasticity_massarsch(plasticity_index, fail_silently=Tr
 
     :rtype: Python dictionary with keys ['Ko [-]']
 
-    .. figure:: images\\lateralearthpressure_plasticity_massarsch.PNG
+    .. figure:: images/lateralearthpressure_plasticity_massarsch.PNG
         :figwidth: 500
         :width: 400
         :align: center
@@ -81,7 +81,7 @@ def secondarycompressionratio_watercontent_mesri(water_content, fail_silently=Tr
 
     :rtype: Python dictionary with keys ['secondary_compression_ratio [%]']
 
-    .. figure:: images\\secondarycompressionratio_watercontent_mesri.PNG
+    .. figure:: images/secondarycompressionratio_watercontent_mesri.PNG
         :figwidth: 500
         :width: 400
         :align: center

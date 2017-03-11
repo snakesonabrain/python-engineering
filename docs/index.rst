@@ -9,13 +9,23 @@ python-engineering bundles a large amount of knowledge and provides it to end us
    - Raise awareness on underlying test data and theories supporting engineering correlations and design formulae
    - Promoting development of open-source engineering software by the worldwide community of engineers
 
-python-engineering is developed using a set of 10 Golden rules which are reflected in the proprietary python-engineering function
+python-engineering is developed using a set of 10 Golden rules which are reflected in the python-engineering function
 architecture and should also be followed by any contributors to the project.
 
 Installation requirements
 -------------------------
 
 python-engineering is written for Python 3.x. Downloading Anaconda3 is recommended for users not familiar with Python development.
+
+How-to
+------------
+
+.. toctree::
+    :maxdepth: 1
+
+    Getting_started
+
+    Golden_rules
 
 Contents
 --------
@@ -28,18 +38,6 @@ Contents
    geotechnical/Geotechnical_engineering
    
    hydraulics/Hydraulics
-
-
-How-to
-------------
-
-.. toctree::
-    :maxdepth: 1
-
-    Getting_started
-
-    Golden_rules
-
 
 Indices and tables
 ==================

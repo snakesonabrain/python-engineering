@@ -27,7 +27,7 @@ def plasticity_chart(liquid_limit, plasticity_index, fail_silently=True, **kwarg
 
     :rtype: Python dictionary with keys ['classification [-]','aline_PI [%]']
 
-    .. figure:: images\\Casagrande_chart.PNG
+    .. figure:: images/Casagrande_chart.PNG
         :figwidth: 500
         :width: 400
         :align: center

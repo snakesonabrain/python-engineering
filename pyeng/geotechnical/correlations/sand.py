@@ -30,7 +30,7 @@ def frictionangle_overburden_kleven(sigma_vo_eff, relative_density, Ko=0.5, max_
 
     :rtype: Python dictionary with keys ['phi [deg]','sigma_m [kPa]']
 
-    .. figure:: images\\Phi_Kleven.png
+    .. figure:: images/Phi_Kleven.png
         :figwidth: 500
         :width: 400
         :align: center
@@ -118,7 +118,7 @@ def lateralearthpressure_relativedensity_bellotti(relative_density, fail_silentl
 
     :rtype: Python dictionary with keys ['Ko [-]']
 
-    .. figure:: images\\lateralearthpressure_relativedensity_bellotti.PNG
+    .. figure:: images/lateralearthpressure_relativedensity_bellotti.PNG
         :figwidth: 500
         :width: 400
         :align: center

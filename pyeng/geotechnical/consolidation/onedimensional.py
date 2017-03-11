@@ -45,7 +45,7 @@ def consolidation_drainage_janbu(time, consolidation_coefficient, drainage_path_
 
     :rtype: Python dictionary with keys ['consolidation_degree [%]','time_factor [-]']
 
-    .. figure:: images\\consolidation_drainage_janbu.PNG
+    .. figure:: images/consolidation_drainage_janbu.PNG
         :figwidth: 500
         :width: 400
         :align: center
