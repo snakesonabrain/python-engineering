@@ -203,8 +203,10 @@ def map_args(method,var,*args,**kwargs):
         # Add the value used at runtime to the validation data structure, except for raises_errors and validate
         # which are used elsewhere and not in the validation routine
         for key in all_vars.keys():
-            if key!='fail_silently' and key!='validate':
+            try:
                 var_validation[key]['value'] = all_vars[key]
+            except:
+                pass
         
         return var_validation
     except Exception as err:
@@ -266,5 +268,89 @@ class ValidationDecorator(object):
                 pass  # No validation
 
             return fn(*args, validated=validated, errorstring=errorstring, **kwargs)
+
+        return decorated
+
+
+class NewValidationDecorator(object):
+    """
+    The NewValidationDecorator has the following features
+
+        - Automatic handling of validation errors
+        - Automatic handling of function output upon errors
+        - Possibility to override the default validation dictionary with custom validation
+
+    """
+
+    def __init__(self, validationspec, outputonerrorspec):
+        self.validationspec = validationspec
+        self.outputonerror = outputonerrorspec
+
+    def __call__(self, fn):
+        @wraps(fn)
+        def decorated(*args, **kwargs):
+
+            try:
+                validate = kwargs['validate']
+            except:
+                validate = None
+
+            try:
+                fail_silently = kwargs['fail_silently']
+            except:
+                fail_silently = True
+
+            try:
+                validation_params = kwargs['customvalidation']
+            except:
+                validation_params = self.validationspec
+
+            try:
+                output_for_errors = kwargs['customerroroutput']
+            except:
+                output_for_errors = self.outputonerror
+
+            if validate or validate is None:
+                # Execute validation
+                try:
+                    var_validation = map_args(fn, validation_params, *args, **kwargs)
+
+                    for v in var_validation.keys():
+
+                        if var_validation[v]['type'] == 'float':
+                            validate_float(v, var_validation[v]['value'],
+                                           var_validation[v]['min_value'],
+                                           var_validation[v]['max_value'])
+                        elif var_validation[v]['type'] == 'int':
+                            validate_integer(v, var_validation[v]['value'],
+                                             var_validation[v]['min_value'],
+                                             var_validation[v]['max_value'])
+                        elif var_validation[v]['type'] == 'string':
+                            validate_string(v, var_validation[v]['value'],
+                                            options=var_validation[v]['options'],
+                                            regex=var_validation[v]['regex'])
+                        elif var_validation[v]['type'] == 'bool':
+                            validate_boolean(v, var_validation[v]['value'])
+                        elif var_validation[v]['type'] == 'list':
+                            validate_list(v, var_validation[v]['value'],
+                                          var_validation[v]['elementtype'],
+                                          var_validation[v]['order'],
+                                          var_validation[v]['unique'],
+                                          var_validation[v]['empty_allowed'])
+
+                except:
+                    raise
+            else:
+                # No validation
+                pass
+
+            try:
+                result = fn(*args, **kwargs)
+                return result
+            except:
+                if fail_silently:
+                    return output_for_errors
+                else:
+                    raise
 
         return decorated

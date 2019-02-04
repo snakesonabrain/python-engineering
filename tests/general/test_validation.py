@@ -5,7 +5,7 @@ __author__ = 'Bruno Stuyts'
 
 import unittest
 import numpy as np
-from pyeng.general.validation import ValidationDecorator, validate_float, validate_integer, validate_string, \
+from pyeng.general.validation import ValidationDecorator, NewValidationDecorator, validate_float, validate_integer, validate_string, \
     validate_boolean, validate_list, map_args
 
 VALIDATION_DATA = {
@@ -286,3 +286,83 @@ class Test_validate(unittest.TestCase):
     def test_fail_silent(self):
         self.assertRaises(ValueError,self.test_fail_silentfunc,0.0,'bruno',fail_silently=False)
         self.assertEqual(np.isnan(self.test_fail_silentfunc(0.0,'bruno')),True)
+
+
+class Test_validate_new(unittest.TestCase):
+
+    def setUp(self):
+
+        self.ERROR_DICT = {'value': np.NaN}
+
+        self.CUSTOM_ERROR_DICT = {'value': 0.0}
+
+        self.CUSTOM_VALIDATION = {
+            'a': {'type':'float','min_value':0.0,'max_value':3.0},
+            'b': {'type':'string','options':('bruno','stuyts','hendrik'),'regex':None},
+            'c': {'type':'float','min_value':None,'max_value':None},
+            'd': {'type':'list','elementtype':'float','order':'ascending','unique':True,'empty_allowed':True}
+        }
+
+        @NewValidationDecorator(VALIDATION_DATA, self.ERROR_DICT)
+        def test_validated_func(a, b, c=1.0, d=[], **kwargs):
+            return {'value': True}
+        self.test_validated_func = test_validated_func
+
+        @NewValidationDecorator(VALIDATION_DATA, self.ERROR_DICT)
+        def test_fail_silentfunc(a, b, c=1.0, d=[], fail_silently=True, **kwargs):
+            errorval = 1.0 / 0.0
+            return {'value': errorval}
+        self.test_fail_silentfunc = test_fail_silentfunc
+
+    def test_validate_errors(self):
+        self.assertRaises(ValueError,self.test_validated_func,2.0,'bruno')
+        self.assertRaises(ValueError,self.test_validated_func,4.0,'bruno', customvalidation=self.CUSTOM_VALIDATION)
+        self.assertRaises(Exception,self.test_validated_func,0.5,1.0)
+        self.assertRaises(ValueError,self.test_validated_func,0.5,'hendrik')
+        self.assertRaises(ValueError,self.test_validated_func,0.5,'bruno',c__min=2.0)
+        self.assertRaises(ValueError,self.test_validated_func,0.5,'bruno',c__max=0.0)
+        self.assertRaises(ValueError,self.test_validated_func,0.5,'bruno',d=[1.0,'b',3.0])
+        self.assertRaises(ValueError,self.test_validated_func,0.5,'bruno',d=[1.0,5.0,3.0])
+        self.assertRaises(ValueError,self.test_validated_func,0.5,'bruno',d=[1.0,1.0,3.0])
+
+    def test_validate_correct(self):
+        self.assertTrue(self.test_validated_func(0.5,'bruno')['value'])
+        self.assertTrue(self.test_validated_func(1.5,'bruno', customvalidation=self.CUSTOM_VALIDATION)['value'])
+        self.assertTrue(self.test_validated_func(0.5,'bruno',c__min=0.0,c__max=2.0)['value'])
+        self.assertTrue(self.test_validated_func(0.5,'bruno',c__min=2.0,c__max=3.0,validate=False)['value'])
+        self.assertTrue(self.test_validated_func(0.5,1.0,validate=False)['value'])
+
+    def test_fail_silent(self):
+        self.assertRaises(Exception,self.test_fail_silentfunc,0.0,'bruno',fail_silently=False)
+        self.assertTrue(np.math.isnan(self.test_fail_silentfunc(0.0,'bruno')['value']))
+        self.assertEqual(self.test_fail_silentfunc(0.0,'bruno', customerroroutput=self.CUSTOM_ERROR_DICT)['value'], 0.0)
+
+    def test_additional_call(self):
+
+        def external_func(**kwargs):
+            # External function calling the function test_validated_func
+            result = self.test_validated_func(**kwargs)
+            return result['value']
+
+        def external_func_failure(**kwargs):
+            # External function calling the function test_fail_silentfunc
+            result = self.test_fail_silentfunc(**kwargs)
+            return result['value']
+
+        @NewValidationDecorator(VALIDATION_DATA, self.ERROR_DICT)
+        def double_decorated_func(a, b, c=1.0, d=[], **kwargs):
+            # An external function also decorated with the validation decorator. Note that arguments and keyword
+            # arguments used by the function need to be passes explicitly to the inside function since.
+            # These are not in kwargs
+            result = self.test_validated_func(a, b, c=c, d=d, **kwargs)
+            return result['value']
+
+        self.assertTrue(external_func(a=0.5, b='bruno'))
+        self.assertRaises(ValueError, external_func, a=4.0, b='bruno')
+        self.assertTrue(external_func(a=1.5, b='bruno', customvalidation=self.CUSTOM_VALIDATION))
+        self.assertTrue(external_func(validate=False, a=25000.0, b='testje'))
+        self.assertEqual(external_func_failure(a=0.0, b='bruno', customerroroutput=self.CUSTOM_ERROR_DICT),
+                         0.0)
+        self.assertTrue(double_decorated_func(a=0.5, b='bruno'))
+        self.assertRaises(ValueError, double_decorated_func, a=4.0, b='bruno')
+        self.assertTrue(double_decorated_func(a=1.5, b='bruno', customvalidation=self.CUSTOM_VALIDATION))
