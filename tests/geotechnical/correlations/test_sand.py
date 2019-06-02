@@ -3,8 +3,14 @@
 
 __author__ = 'Bruno Stuyts'
 
+# Django and native Python packages
 import unittest
+
+# 3rd party packages
+
+# Project imports
 from pyeng.geotechnical.correlations import sand
+
 
 class Test_friction_angle_kleven(unittest.TestCase):
     
@@ -20,4 +26,11 @@ class Test_lateralearthpressure_relativedensity_bellotti(unittest.TestCase):
 
     def test_values(self):
         self.assertAlmostEqual(sand.lateralearthpressure_relativedensity_bellotti(50.0)['Ko [-]'], 0.46, 2)
+
+
+class Test_gmax_cptsand_lunne(unittest.TestCase):
+
+    def test_values(self):
+        self.assertAlmostEqual(
+            sand.gmax_cptsand_lunne(cone_resistance=10.0, sigma_vo_eff=100.0)['Gmax [kPa]'], 91886.6, 1)
 

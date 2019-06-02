@@ -272,7 +272,7 @@ class ValidationDecorator(object):
         return decorated
 
 
-class NewValidationDecorator(object):
+class Validator(object):
     """
     The NewValidationDecorator has the following features
 

@@ -10,7 +10,7 @@ import warnings
 import numpy as np
 
 # Project imports
-from pyeng.general.validation import NewValidationDecorator
+from pyeng.general.validation import Validator
 
 
 NQ_FRICTIONANGLE_SAND = {
@@ -22,7 +22,7 @@ NQ_FRICTIONANGLE_SAND_ERRORRETURN = {
 }
 
 
-@NewValidationDecorator(NQ_FRICTIONANGLE_SAND, NQ_FRICTIONANGLE_SAND_ERRORRETURN)
+@Validator(NQ_FRICTIONANGLE_SAND, NQ_FRICTIONANGLE_SAND_ERRORRETURN)
 def nq_frictionangle_sand(
         friction_angle,
         **kwargs):
@@ -59,7 +59,7 @@ NGAMMA_FRICTIONANGLE_VESIC_ERRORRETURN = {
 }
 
 
-@NewValidationDecorator(NGAMMA_FRICTIONANGLE_VESIC, NGAMMA_FRICTIONANGLE_VESIC_ERRORRETURN)
+@Validator(NGAMMA_FRICTIONANGLE_VESIC, NGAMMA_FRICTIONANGLE_VESIC_ERRORRETURN)
 def ngamma_frictionangle_vesic(
         friction_angle,
         **kwargs):
@@ -96,7 +96,7 @@ NGAMMA_FRICTIONANGLE_MEYERHOF_ERRORRETURN = {
 }
 
 
-@NewValidationDecorator(NGAMMA_FRICTIONANGLE_MEYERHOF, NGAMMA_FRICTIONANGLE_MEYERHOF_ERRORRETURN)
+@Validator(NGAMMA_FRICTIONANGLE_MEYERHOF, NGAMMA_FRICTIONANGLE_MEYERHOF_ERRORRETURN)
 def ngamma_frictionangle_meyerhof(
         friction_angle,
         frictionangle_multiplier=1.4, **kwargs):
@@ -141,7 +141,7 @@ NGAMMA_FRICTIONANGLE_DAVISBOOKER_ERRORRETURN = {
 }
 
 
-@NewValidationDecorator(NGAMMA_FRICTIONANGLE_DAVISBOOKER, NGAMMA_FRICTIONANGLE_DAVISBOOKER_ERRORRETURN)
+@Validator(NGAMMA_FRICTIONANGLE_DAVISBOOKER, NGAMMA_FRICTIONANGLE_DAVISBOOKER_ERRORRETURN)
 def ngamma_frictionangle_davisbooker(
         friction_angle, roughness_factor,
         multiplier_smooth=0.0663, multiplier_rough=0.1054, multiplier_exp_smooth=9.3, multiplier_exp_rough=9.6,

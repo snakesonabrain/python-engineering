@@ -3,8 +3,16 @@
 
 __author__ = 'Bruno Stuyts'
 
-from pyeng.general.validation import ValidationDecorator
+# Django and native Python packages
+import logging
+import traceback
+
+# 3rd party packages
 import numpy as np
+
+# Project imports
+from pyeng.general.validation import ValidationDecorator, Validator
+
 
 LATERALEARTHPRESSURE_PLASTICITY_MASSARSCH = {
     'plasticity_index': {'type': 'float', 'min_value': 20.0, 'max_value': 70.0},
@@ -113,3 +121,50 @@ def secondarycompressionratio_watercontent_mesri(water_content, fail_silently=Tr
         else:
             raise
 
+
+GMAX_CPTCLAY_MAYNERIX95 = {
+    'cone_resistance': {'type': 'float', 'min_value': 0.0, 'max_value': 120.0},
+    'density': {'type': 'float', 'min_value': 1000.0, 'max_value': 3000.0},
+    'coefficient_1': {'type': 'float', 'min_value': None, 'max_value': None},
+    'coefficient_2': {'type': 'float', 'min_value': None, 'max_value': None},
+}
+
+GMAX_CPTCLAY_MAYNERIX95_ERRORRETURN = {
+    'Vs [m/s]': np.nan,
+    'Gmax [kPa]': np.nan,
+}
+
+
+@Validator(GMAX_CPTCLAY_MAYNERIX95, GMAX_CPTCLAY_MAYNERIX95_ERRORRETURN)
+def gmax_cptclay_maynerix95(
+        cone_resistance, density,
+        coefficient_1=1.75, coefficient_2=0.627, **kwargs):
+    """
+    Calculates the small-strain shear modulus for intact and fissured clays. This relation is used when initial void ratio is difficult to estimate.
+
+    :param cone_resistance: Cone tip resistance (:math:`q_c`) [:math:`MPa`] - Suggested range: 0.0 <= cone_resistance <= 120.0
+    :param density: Density of the soil material (:math:`\\rho`) [:math:`kg/m3`] - Suggested range: 1000.0 <= density <= 3000.0
+    :param coefficient_1: First coefficient (multiplier) in the correlation (:math:``) [:math:`-`] (optional, default= 1.75)
+    :param coefficient_2: Second coefficient (exponent) in the correlation (:math:``) [:math:`-`] (optional, default= 0.627)
+
+    .. math::
+        V_s = 1.75 \\cdot (q_c)^{0.627}
+
+        G_{max} = \\rho \\cdot V_s^2
+
+    :returns: Dictionary with the following keys:
+
+        - 'Vs [m/s]': Shear wave velocity (:math:`V_s`)  [:math:`m/s`]
+        - 'Gmax [kPa]': Small-strain shear modulus (:math:`G_{max}`)  [:math:`kPa`]
+
+    Reference - Ameratunga, J., Sivakugan, N., Das, B.M., 2016. Correlations of Soil and Rock Properties in Geotechnical Engineering. Springer, India.
+
+    """
+
+    _vs = coefficient_1 * (1e3 * cone_resistance) ** coefficient_2
+    _gmax = density * (_vs ** 2) * 1e-3
+
+    return {
+        'Vs [m/s]': _vs,
+        'Gmax [kPa]': _gmax,
+    }

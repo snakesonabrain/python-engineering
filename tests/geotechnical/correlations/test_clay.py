@@ -3,7 +3,12 @@
 
 __author__ = 'Bruno Stuyts'
 
+# Django and native Python packages
 import unittest
+
+# 3rd party packages
+
+# Project imports
 from pyeng.geotechnical.correlations import clay
 
 
@@ -23,3 +28,10 @@ class Test_secondarycompressionratio_watercontent_mesri(unittest.TestCase):
         self.assertAlmostEqual(
             clay.secondarycompressionratio_watercontent_mesri(811.0)['secondary_compression_ratio [%]'],
             8.38, 2)
+
+
+class Test_gmax_cptclay_maynerix95(unittest.TestCase):
+    def test_values(self):
+        self.assertAlmostEqual(
+            clay.gmax_cptclay_maynerix95(cone_resistance=1.0, density=1750)['Gmax [kPa]'],
+            30982.3, 1)

@@ -3,8 +3,14 @@
 
 __author__ = 'Bruno Stuyts'
 
-from pyeng.general.validation import ValidationDecorator
+# Django and native Python packages
+
+# 3rd party packages
 import numpy as np
+
+# Project imports
+from pyeng.general.validation import ValidationDecorator, Validator
+
 
 FRICTIONANGLE_OVERBURDEN_KLEVEN = {
     'sigma_vo_eff': {'type': 'float', 'min_value': 10.0, 'max_value': 800.0},
@@ -161,3 +167,54 @@ def lateralearthpressure_relativedensity_bellotti(relative_density, fail_silentl
         else:
             raise
 
+
+GMAX_CPTSAND_LUNNE = {
+    'cone_resistance': {'type': 'float', 'min_value': 0.0, 'max_value': 120.0},
+    'sigma_vo_eff': {'type': 'float', 'min_value': 0.0, 'max_value': None},
+    'coefficient_1': {'type': 'float', 'min_value': None, 'max_value': None},
+    'coefficient_2': {'type': 'float', 'min_value': None, 'max_value': None},
+}
+
+GMAX_CPTSAND_LUNNE_ERRORRETURN = {
+    'Gmax [kPa]': np.nan,
+}
+
+
+@Validator(GMAX_CPTSAND_LUNNE, GMAX_CPTSAND_LUNNE_ERRORRETURN)
+def gmax_cptsand_lunne(
+        cone_resistance, sigma_vo_eff,
+        coefficient_1=1634.0, coefficient_2=-0.75, **kwargs):
+    """
+    Calculates the small-strain shear modulus or uncemented quartz sand from cone tip resistance. The correlation is based on the results of field and calibration chamber tests.
+
+    At low values of the normalised cone resistance, the uncertainty on the estimate is greater. This is likely due to variations in soil compressibility
+
+    :param cone_resistance: Cone tip resistance (:math:`q_c`) [:math:`MPa`] - Suggested range: 0.0 <= cone_resistance <= 120.0
+    :param sigma_vo_eff: Vertical effective stress (:math:`\\sigma_{vo}^{\\prime}`) [:math:`kPa`] - Suggested range: sigma_vo_eff >= 0.0
+    :param coefficient_1: First calibration coefficient (multiplier) (:math:``) [:math:`-`] (optional, default= 1634.0)
+    :param coefficient_2: Second calibration coefficient (exponent) (:math:``) [:math:`-`] (optional, default= -0.75)
+
+    .. math::
+        \\left( \\frac{G_{max}}{q_c} \\right)_{ave} = 1634 \\cdot \\left( \\frac{q_c}{\\sqrt{\\sigma_{vo}^{\\prime}}} \\right)^{-0.75}
+
+    :returns: Dictionary with the following keys:
+
+        - 'Gmax [kPa]': Small-strain shear modulus (:math:`G_{max}`)  [:math:`kPa`]
+
+    .. figure:: images/gmax_cptsand_lunne_1.png
+        :figwidth: 500.0
+        :width: 450.0
+        :align: center
+
+        Ranges of the correlation
+
+    Reference - Lunne, T., Robertson, P.K., Powell, J.J.M., 1997. Cone penetration testing in geotechnical practice. E & FN Spon.
+
+    """
+
+    _Gmax = 1e3 * cone_resistance * coefficient_1 * \
+            ((1e3 * cone_resistance / np.sqrt(sigma_vo_eff)) ** coefficient_2)
+
+    return {
+        'Gmax [kPa]': _Gmax,
+    }

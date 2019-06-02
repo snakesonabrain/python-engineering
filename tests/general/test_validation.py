@@ -5,7 +5,7 @@ __author__ = 'Bruno Stuyts'
 
 import unittest
 import numpy as np
-from pyeng.general.validation import ValidationDecorator, NewValidationDecorator, validate_float, validate_integer, validate_string, \
+from pyeng.general.validation import ValidationDecorator, Validator, validate_float, validate_integer, validate_string, \
     validate_boolean, validate_list, map_args
 
 VALIDATION_DATA = {
@@ -303,12 +303,12 @@ class Test_validate_new(unittest.TestCase):
             'd': {'type':'list','elementtype':'float','order':'ascending','unique':True,'empty_allowed':True}
         }
 
-        @NewValidationDecorator(VALIDATION_DATA, self.ERROR_DICT)
+        @Validator(VALIDATION_DATA, self.ERROR_DICT)
         def test_validated_func(a, b, c=1.0, d=[], **kwargs):
             return {'value': True}
         self.test_validated_func = test_validated_func
 
-        @NewValidationDecorator(VALIDATION_DATA, self.ERROR_DICT)
+        @Validator(VALIDATION_DATA, self.ERROR_DICT)
         def test_fail_silentfunc(a, b, c=1.0, d=[], fail_silently=True, **kwargs):
             errorval = 1.0 / 0.0
             return {'value': errorval}
@@ -349,7 +349,7 @@ class Test_validate_new(unittest.TestCase):
             result = self.test_fail_silentfunc(**kwargs)
             return result['value']
 
-        @NewValidationDecorator(VALIDATION_DATA, self.ERROR_DICT)
+        @Validator(VALIDATION_DATA, self.ERROR_DICT)
         def double_decorated_func(a, b, c=1.0, d=[], **kwargs):
             # An external function also decorated with the validation decorator. Note that arguments and keyword
             # arguments used by the function need to be passes explicitly to the inside function since.
