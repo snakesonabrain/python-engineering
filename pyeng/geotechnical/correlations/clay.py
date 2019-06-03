@@ -168,3 +168,53 @@ def gmax_cptclay_maynerix95(
         'Vs [m/s]': _vs,
         'Gmax [kPa]': _gmax,
     }
+
+
+PERMEABILITY_REMOULDEDCLAY_CARRIERBECKMAN = {
+    'void_ratio': {'type': 'float', 'min_value': 0.0, 'max_value': 4.0},
+    'plastic_limit': {'type': 'float', 'min_value': 0.0, 'max_value': 100.0},
+    'plasticity_index': {'type': 'float', 'min_value': 0.0, 'max_value': 100.0},
+    'coefficient_1': {'type': 'float', 'min_value': None, 'max_value': None},
+    'coefficient_2': {'type': 'float', 'min_value': None, 'max_value': None},
+    'coefficient_3': {'type': 'float', 'min_value': None, 'max_value': None},
+    'coefficient_4': {'type': 'float', 'min_value': None, 'max_value': None},
+}
+
+PERMEABILITY_REMOULDEDCLAY_CARRIERBECKMAN_ERRORRETURN = {
+    'k [m/s]': np.nan,
+}
+
+
+@Validator(PERMEABILITY_REMOULDEDCLAY_CARRIERBECKMAN, PERMEABILITY_REMOULDEDCLAY_CARRIERBECKMAN_ERRORRETURN)
+def permeability_remouldedclay_carrierbeckman(
+        void_ratio, plastic_limit, plasticity_index,
+        coefficient_1=0.0174, coefficient_2=0.027, coefficient_3=0.242, coefficient_4=4.29, **kwargs):
+    """
+    The correlation provides the permeability of remoulded clay based on the void ratio of the clay and the Atterberg limits.
+
+    :param void_ratio: Void ratio for the remoulded clay (:math:`e`) [:math:`-`] - Suggested range: 0.0 <= void_ratio <= 4.0
+    :param plastic_limit: Plastic limit of the clay (:math:`PL`) [:math:`pct`] - Suggested range: 0.0 <= plastic_limit <= 100.0
+    :param plasticity_index: Plasticity index of the clay (:math:`PI`) [:math:`pct`] - Suggested range: 0.0 <= plasticity_index <= 100.0
+    :param coefficient_1: First coefficient in the equation (:math:``) [:math:`-`] (optional, default= 0.0174)
+    :param coefficient_2: Second coefficient in the equation (:math:``) [:math:`-`] (optional, default= 0.027)
+    :param coefficient_3: Third coefficient in the equation (:math:``) [:math:`-`] (optional, default= 0.242)
+    :param coefficient_4: Fourth coefficient in the equation (:math:``) [:math:`-`] (optional, default= 4.29)
+
+    .. math::
+        k(m/s) \\approx \\frac{0.0174}{1+e} \\left[ \\frac{e-0.027 \\cdot (PL - 0.242 \\cdot PI)}{PI} \\right]^{4.29}
+
+    :returns: Dictionary with the following keys:
+
+        - 'k [m/s]': Permeability of the remoulded clay (:math:`k`)  [:math:`m/s`]
+
+    Reference - Carrier WD III, Beckman JF (1984) Correlations between index tests and the properties of remolded clays. Geotechnique 34(2):211–228
+
+    """
+
+    _k = (coefficient_1 / (1 + void_ratio)) * \
+         (((void_ratio - coefficient_2 * (plastic_limit - coefficient_3 * plasticity_index)) /
+           (plasticity_index)) ** coefficient_4)
+
+    return {
+        'k [m/s]': _k,
+    }

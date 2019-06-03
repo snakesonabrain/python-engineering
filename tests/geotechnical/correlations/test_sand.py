@@ -34,3 +34,10 @@ class Test_gmax_cptsand_lunne(unittest.TestCase):
         self.assertAlmostEqual(
             sand.gmax_cptsand_lunne(cone_resistance=10.0, sigma_vo_eff=100.0)['Gmax [kPa]'], 91886.6, 1)
 
+
+class Test_permeability_grainsize_chapuis(unittest.TestCase):
+
+    def test_values(self):
+        self.assertAlmostEqual(
+            sand.permeability_grainsize_chapuis(void_ratio=0.4, d10=0.6)['k [m/s]'], 0.001, 4)
+

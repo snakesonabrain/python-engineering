@@ -218,3 +218,48 @@ def gmax_cptsand_lunne(
     return {
         'Gmax [kPa]': _Gmax,
     }
+
+
+PERMEABILITY_GRAINSIZE_CHAPUIS = {
+    'void_ratio': {'type': 'float', 'min_value': 0.0, 'max_value': 1.0},
+    'd10': {'type': 'float', 'min_value': 0.1, 'max_value': 3.0},
+    'coefficient_1': {'type': 'float', 'min_value': None, 'max_value': None},
+    'coefficient_2': {'type': 'float', 'min_value': None, 'max_value': None},
+}
+
+PERMEABILITY_GRAINSIZE_CHAPUIS_ERRORRETURN = {
+    'k [m/s]': np.nan,
+}
+
+
+@Validator(PERMEABILITY_GRAINSIZE_CHAPUIS, PERMEABILITY_GRAINSIZE_CHAPUIS_ERRORRETURN)
+def permeability_grainsize_chapuis(
+        void_ratio, d10,
+        coefficient_1=2.4622, coefficient_2=0.7825, **kwargs):
+    """
+    Correlates permeability for natural uniform sand and gravel based on laboratory tests on remoulded compacted sand. The 10 percentile grain size and void ratio are required.
+
+The correlation is valid for permeabilities in the range 1e-3 to 1e-5 m/s
+
+    :param void_ratio: Void ratio for the sand and compaction under consideration (:math:`e`) [:math:`-`] - Suggested range: 0.0 <= void_ratio <= 1.0
+    :param d10: 10th percentile grain size (:math:`d_{10}`) [:math:`mm`] - Suggested range: 0.1 <= d10 <= 3.0
+    :param coefficient_1: First calibration coefficient (multiplier) (:math:``) [:math:`-`] (optional, default= 2.4622)
+    :param coefficient_2: Second calibration coefficient (exponent) (:math:``) [:math:`-`] (optional, default= 0.7825)
+
+    .. math::
+        k (cm/s) = 2.4622 \\cdot \\left[ d_{10}^2 \\cdot \\left( \\frac{e^3}{1 + e} \\right) \\right]^{0.7825}
+
+    :returns: Dictionary with the following keys:
+
+        - 'k [m/s]': Permeability of sand (:math:`k`)  [:math:`m/s`]
+
+    Reference - Chapuis RP (2004) Predicting the saturated hydraulic conductivity of sand and gravel using
+effective diameter and void ratio. Can Geotech J 41(5):787–795
+
+    """
+
+    _k = 1e-2 * coefficient_1 * (((d10 ** 2) * ((void_ratio ** 3) / (1 + void_ratio))) ** coefficient_2)
+
+    return {
+        'k [m/s]': _k,
+    }

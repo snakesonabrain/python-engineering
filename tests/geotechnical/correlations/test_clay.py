@@ -35,3 +35,12 @@ class Test_gmax_cptclay_maynerix95(unittest.TestCase):
         self.assertAlmostEqual(
             clay.gmax_cptclay_maynerix95(cone_resistance=1.0, density=1750)['Gmax [kPa]'],
             30982.3, 1)
+
+
+class Test_permeability_remouldedclay_carrierbeckman(unittest.TestCase):
+    def test_values(self):
+        self.assertAlmostEqual(
+            clay.permeability_remouldedclay_carrierbeckman(
+                void_ratio=1, plastic_limit=30, plasticity_index=30)['k [m/s]'],
+            6.7e-11, 12)
+
