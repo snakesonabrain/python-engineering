@@ -1,6 +1,9 @@
 Python Engineering
 ---------------------
 
+.. image:: https://travis-ci.org/snakesonabrain/python-engineering.svg?branch=master
+    :target: https://travis-ci.org/snakesonabrain/python-engineering
+
 This package contains Python functions for engineering applications.
 
 python-engineering bundles a large amount of knowledge and provides it to end users through extensively documented functions. The aim of the package is as follows:
