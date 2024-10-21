@@ -285,7 +285,7 @@ additional keyword argument. This is illustrated in the example below:
 
 .. code-block:: python
 
-    # Silent failure, returning np.NaN
+    # Silent failure, returning np.nan
     from pyeng.general.geometry.geom_2d import Circle
     my_circle = Circle(radius=-1.0)
     print("Circle area = %.2fm2" % my_circle.centroid['area [m2]'])

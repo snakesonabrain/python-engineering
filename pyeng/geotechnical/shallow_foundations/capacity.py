@@ -18,7 +18,7 @@ NQ_FRICTIONANGLE_SAND = {
 }
 
 NQ_FRICTIONANGLE_SAND_ERRORRETURN = {
-    'Nq [-]': np.NaN,
+    'Nq [-]': np.nan,
 }
 
 
@@ -55,7 +55,7 @@ NGAMMA_FRICTIONANGLE_VESIC = {
 }
 
 NGAMMA_FRICTIONANGLE_VESIC_ERRORRETURN = {
-    'Ngamma [-]': np.NaN,
+    'Ngamma [-]': np.nan,
 }
 
 
@@ -92,7 +92,7 @@ NGAMMA_FRICTIONANGLE_MEYERHOF = {
 }
 
 NGAMMA_FRICTIONANGLE_MEYERHOF_ERRORRETURN = {
-    'Ngamma [-]': np.NaN,
+    'Ngamma [-]': np.nan,
 }
 
 
@@ -135,9 +135,9 @@ NGAMMA_FRICTIONANGLE_DAVISBOOKER = {
 }
 
 NGAMMA_FRICTIONANGLE_DAVISBOOKER_ERRORRETURN = {
-    'Ngamma [-]': np.NaN,
-    'Ngamma_smooth [-]': np.NaN,
-    'Ngamma_rough [-]': np.NaN,
+    'Ngamma [-]': np.nan,
+    'Ngamma_smooth [-]': np.nan,
+    'Ngamma_rough [-]': np.nan,
 }
 
 

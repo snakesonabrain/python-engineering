@@ -141,8 +141,8 @@ def consolidation_drainage_janbu(time, consolidation_coefficient, drainage_path_
     except:
         if fail_silently or fail_silently is None:
             return {
-                'consolidation_degree [%]': np.NaN,
-                'time_factor [-]': np.NaN,
+                'consolidation_degree [%]': np.nan,
+                'time_factor [-]': np.nan,
             }
         else:
             raise

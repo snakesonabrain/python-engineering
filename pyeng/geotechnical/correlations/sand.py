@@ -101,8 +101,8 @@ def frictionangle_overburden_kleven(sigma_vo_eff, relative_density, Ko=0.5, max_
     except Exception as err:
         if fail_silently or fail_silently is None:
             return {
-                'phi [deg]': np.NaN,
-                'sigma_m [kPa]': np.NaN,
+                'phi [deg]': np.nan,
+                'sigma_m [kPa]': np.nan,
             }
         else:
             raise
@@ -162,7 +162,7 @@ def lateralearthpressure_relativedensity_bellotti(relative_density, fail_silentl
     except:
         if fail_silently or fail_silently is None:
             return {
-                'Ko [-]': np.NaN,
+                'Ko [-]': np.nan,
             }
         else:
             raise

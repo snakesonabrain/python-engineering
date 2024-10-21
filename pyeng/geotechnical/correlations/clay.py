@@ -58,7 +58,7 @@ def lateralearthpressure_plasticity_massarsch(plasticity_index, fail_silently=Tr
     except:
         if fail_silently or fail_silently is None:
             return {
-                'Ko [-]': np.NaN,
+                'Ko [-]': np.nan,
             }
         else:
             raise
@@ -116,7 +116,7 @@ def secondarycompressionratio_watercontent_mesri(water_content, fail_silently=Tr
     except:
         if fail_silently or fail_silently is None:
             return {
-                'secondary_compression_ratio [%]': np.NaN,
+                'secondary_compression_ratio [%]': np.nan,
             }
         else:
             raise

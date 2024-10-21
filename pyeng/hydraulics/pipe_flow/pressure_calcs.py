@@ -22,7 +22,7 @@ PRESSUREDROP_RELATIVEROUGHNESS_MOODY = {
 
 @ValidationDecorator(PRESSUREDROP_RELATIVEROUGHNESS_MOODY)
 def pressuredrop_relativeroughness_moody(reynolds_number, pipe_diameter, pipe_material, pipe_length, average_velocity,
-                                         fluid_density, gravity_coefficient=9.81, relative_roughness=np.NaN,
+                                         fluid_density, gravity_coefficient=9.81, relative_roughness=np.nan,
                                          fail_silently=True, **kwargs):
     """
     The Moody diagram relates Reynolds number to Darcy-Weissbach friction factor. This friction factor is used to
@@ -40,7 +40,7 @@ def pressuredrop_relativeroughness_moody(reynolds_number, pipe_diameter, pipe_ma
     :param average_velocity: Average velocity of the fluid in the pipe (:math:`V`) [:math:`m/s`]  - Suggested range: 0.0<=average_velocity
     :param fluid_density: Density of the fluid (:math:`\\rho`) [:math:`kg/m3`]  - Suggested range: 500.0<=fluid_density<=2500.0
     :param gravity_coefficient: Acceleration due to gravity (:math:`g`) [:math:`m/s2`] (optional, default=9.81) - Suggested range: 9.7<=gravity_coefficient<=10.0
-    :param relative_roughness: Relative roughness override [:math:`-`] (optional, default=np.NaN) - Suggested range: relative_roughness<=0.05
+    :param relative_roughness: Relative roughness override [:math:`-`] (optional, default=np.nan) - Suggested range: relative_roughness<=0.05
 
     .. math::
         \\text{Head loss:} \\quad f_D \\frac{L}{d} \\frac{V^2}{2 g}
@@ -514,13 +514,13 @@ def pressuredrop_relativeroughness_moody(reynolds_number, pipe_diameter, pipe_ma
     except:
         if fail_silently or fail_silently is None:
             return {
-                'friction_factor [-]': np.NaN,
-                'roughness [mm]': np.NaN,
-                'head_loss [m]': np.NaN,
-                'pressure_drop [Pa]': np.NaN,
+                'friction_factor [-]': np.nan,
+                'roughness [mm]': np.nan,
+                'head_loss [m]': np.nan,
+                'pressure_drop [Pa]': np.nan,
                 'flow_regime [-]': None,
-                'friction_factor_laminar [-]': np.NaN,
-                'friction_factor_turbulent [-]': np.NaN,
+                'friction_factor_laminar [-]': np.nan,
+                'friction_factor_turbulent [-]': np.nan,
             }
         else:
             raise

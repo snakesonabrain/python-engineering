@@ -28,7 +28,7 @@ class Test_validate_float(unittest.TestCase):
         self.assertRaises(TypeError,validate_float,"example_list",example_list)
 
     def test_nan(self):
-        self.assertEqual(validate_float("example_float",np.NaN),True)
+        self.assertEqual(validate_float("example_float",np.nan),True)
 
     def test_float(self):
         example_float = 1.1
@@ -72,7 +72,7 @@ class Test_validate_integer(unittest.TestCase):
         self.assertEqual(validate_integer("example_int",example_int),True)
 
     def test_nan(self):
-        self.assertEqual(validate_float("example_float",np.NaN),True)
+        self.assertEqual(validate_float("example_float",np.nan),True)
 
     def test_min(self):
         value = 5
@@ -187,9 +187,9 @@ class Test_validate_list(unittest.TestCase):
         self.assertEqual(validate_list("example_list",example_list,order="ascending"),True)
         example_list = [1.0,3.0,2.0]
         self.assertRaises(ValueError,validate_list,"example_list",example_list,order="ascending")
-        example_list = [np.NaN,3.0,2.0]
+        example_list = [np.nan,3.0,2.0]
         self.assertRaises(ValueError,validate_list,"example_list",example_list,order="ascending")
-        example_list = [3.0,np.NaN,2.0]
+        example_list = [3.0,np.nan,2.0]
         self.assertRaises(ValueError,validate_list,"example_list",example_list,order="ascending")
 
     def test_descending(self):
@@ -197,9 +197,9 @@ class Test_validate_list(unittest.TestCase):
         self.assertEqual(validate_list("example_list",example_list,order="descending"),True)
         example_list = [2.0,3.0,1.0]
         self.assertRaises(ValueError,validate_list,"example_list",example_list,order="descending")
-        example_list = [3.0,2.0,np.NaN]
+        example_list = [3.0,2.0,np.nan]
         self.assertRaises(ValueError,validate_list,"example_list",example_list,order="descending")
-        example_list = [3.0,np.NaN,2.0,1.0,]
+        example_list = [3.0,np.nan,2.0,1.0,]
         self.assertRaises(ValueError,validate_list,"example_list",example_list,order="descending")
 
     def test_unique(self):
@@ -262,7 +262,7 @@ class Test_validate(unittest.TestCase):
                 errorval = 1.0 / 0.0
             except Exception as err:
                 if fail_silently or fail_silently is None:
-                    return np.NaN
+                    return np.nan
                 else:
                     raise ValueError("Error during function execution")
         self.test_fail_silentfunc = test_fail_silentfunc
@@ -292,7 +292,7 @@ class Test_validate_new(unittest.TestCase):
 
     def setUp(self):
 
-        self.ERROR_DICT = {'value': np.NaN}
+        self.ERROR_DICT = {'value': np.nan}
 
         self.CUSTOM_ERROR_DICT = {'value': 0.0}
 
@@ -334,7 +334,7 @@ class Test_validate_new(unittest.TestCase):
 
     def test_fail_silent(self):
         self.assertRaises(Exception,self.test_fail_silentfunc,0.0,'bruno',fail_silently=False)
-        self.assertTrue(np.math.isnan(self.test_fail_silentfunc(0.0,'bruno')['value']))
+        self.assertTrue(np.isnan(self.test_fail_silentfunc(0.0,'bruno')['value']))
         self.assertEqual(self.test_fail_silentfunc(0.0,'bruno', customerroroutput=self.CUSTOM_ERROR_DICT)['value'], 0.0)
 
     def test_additional_call(self):

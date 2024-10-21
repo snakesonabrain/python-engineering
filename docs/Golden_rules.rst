@@ -203,7 +203,7 @@ Good practice:
 
 python-engineering functions have built in error handling which fails silently by
 default. This means that if an error occurs during function execution (e.g. due to
-a function argument falling outside validation ranges), ``np.NaN`` is returned for
+a function argument falling outside validation ranges), ``np.nan`` is returned for
 numerical values and ``None`` for strings, lists or dataframes. This prevents errors
 from being raised all the time.
 
@@ -214,7 +214,7 @@ be set to ``False``. This is illustrated in the example below.
 
         >>> from pyeng.geotechnical.correlations import sand
         >>>sand.lateralearthpressure_relativedensity_bellotti(-20.0)['Ko [-]']
-        np.NaN
+        np.nan
 
         >>>sand.lateralearthpressure_relativedensity_bellotti(-20.0, fail_silently=False)['Ko [-]']
         ValueError(relative_density (-20.0) cannot be smaller than 20.0)

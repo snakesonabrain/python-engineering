@@ -34,19 +34,19 @@ class TwodimensionalShape(object):
     """
 
     def __init__(self):
-        self.centroid = {'area [m2]': np.NaN, 'x [m]': np.NaN, 'y [m]': np.NaN}
-        self.areamoment_inertia = {'I_xc [m4]': np.NaN,
-                                   'I_yc [m4]': np.NaN,
-                                   'I_x [m4]': np.NaN,
-                                   'I_y [m4]': np.NaN,
-                                   'J [m4]': np.NaN}
-        self.radius_gyration = {'r_xc [m]': np.NaN,
-                                'r_yc [m]': np.NaN,
-                                'r_x [m]': np.NaN,
-                                'r_y [m]': np.NaN,
-                                'r_p [m]': np.NaN}
-        self.product_inertia = {'I_xc_yc [m4]': np.NaN,
-                                'I_x_y [m4]': np.NaN}
+        self.centroid = {'area [m2]': np.nan, 'x [m]': np.nan, 'y [m]': np.nan}
+        self.areamoment_inertia = {'I_xc [m4]': np.nan,
+                                   'I_yc [m4]': np.nan,
+                                   'I_x [m4]': np.nan,
+                                   'I_y [m4]': np.nan,
+                                   'J [m4]': np.nan}
+        self.radius_gyration = {'r_xc [m]': np.nan,
+                                'r_yc [m]': np.nan,
+                                'r_x [m]': np.nan,
+                                'r_y [m]': np.nan,
+                                'r_p [m]': np.nan}
+        self.product_inertia = {'I_xc_yc [m4]': np.nan,
+                                'I_x_y [m4]': np.nan}
 
 RIGHTTRIANGLERIGHT = {
     'base_width':{'type': 'float','min_value':0.0,'max_value':None},

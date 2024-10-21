@@ -97,13 +97,13 @@ def stresses_pointload_boussinesq(point_load, x, y, z, poisson_coefficient=0.3, 
     except:
         if fail_silently or fail_silently is None:
             return {
-                'sigma_z [kPa]': np.NaN,
-                'sigma_x [kPa]': np.NaN,
-                'sigma_y [kPa]': np.NaN,
-                'tau_zx [kPa]': np.NaN,
-                'tau_yz [kPa]': np.NaN,
-                'tau_xy [kPa]': np.NaN,
-                'radius [m]': np.NaN,
+                'sigma_z [kPa]': np.nan,
+                'sigma_x [kPa]': np.nan,
+                'sigma_y [kPa]': np.nan,
+                'tau_zx [kPa]': np.nan,
+                'tau_yz [kPa]': np.nan,
+                'tau_xy [kPa]': np.nan,
+                'radius [m]': np.nan,
             }
         else:
             raise
@@ -163,9 +163,9 @@ def stresses_lineload_boussinesq(line_load, x, z, fail_silently=True, **kwargs):
     except:
         if fail_silently or fail_silently is None:
             return {
-                'sigma_z [kPa]': np.NaN,
-                'sigma_x [kPa]': np.NaN,
-                'tau_zx [kPa]': np.NaN,
+                'sigma_z [kPa]': np.nan,
+                'sigma_x [kPa]': np.nan,
+                'tau_zx [kPa]': np.nan,
             }
         else:
             raise
@@ -232,9 +232,9 @@ def stresses_striploadconstant_boussinesq(strip_load, load_width, x, z, fail_sil
     except:
         if fail_silently or fail_silently is None:
             return {
-                'sigma_z [kPa]': np.NaN,
-                'sigma_x [kPa]': np.NaN,
-                'tau_zx [kPa]': np.NaN,
+                'sigma_z [kPa]': np.nan,
+                'sigma_x [kPa]': np.nan,
+                'tau_zx [kPa]': np.nan,
             }
         else:
             raise
@@ -302,9 +302,9 @@ def stresses_striploadtriangular_boussinesq(strip_load_max, load_width, x, z, fa
     except:
         if fail_silently or fail_silently is None:
             return {
-                'sigma_z [kPa]': np.NaN,
-                'sigma_x [kPa]': np.NaN,
-                'tau_zx [kPa]': np.NaN,
+                'sigma_z [kPa]': np.nan,
+                'sigma_x [kPa]': np.nan,
+                'tau_zx [kPa]': np.nan,
             }
         else:
             raise
@@ -364,8 +364,8 @@ def stresses_circle_boussinesq(circle_stress, circle_radius, z, radius=0.0, pois
                                              (1.0 / ((1.0 + (circle_radius / z) ** 2.0) ** 1.5)))
             sigma_theta = sigma_r
         else:
-            sigma_r = np.NaN
-            sigma_theta = np.NaN
+            sigma_r = np.nan
+            sigma_theta = np.nan
             z_dimless = z/circle_radius
             r_dimless = radius/circle_radius
             if r_dimless > 10.0 or z_dimless > 15.0:
@@ -806,9 +806,9 @@ def stresses_circle_boussinesq(circle_stress, circle_radius, z, radius=0.0, pois
     except:
         if fail_silently or fail_silently is None:
             return {
-                'sigma_z [kPa]': np.NaN,
-                'sigma_r [kPa]': np.NaN,
-                'sigma_theta [kPa]': np.NaN,
+                'sigma_z [kPa]': np.nan,
+                'sigma_r [kPa]': np.nan,
+                'sigma_theta [kPa]': np.nan,
             }
         else:
             raise
@@ -895,10 +895,10 @@ def stresses_rectangle_boussinesq(rectangle_stress, rectangle_length, rectangle_
     except:
         if fail_silently or fail_silently is None:
             return {
-                'sigma_z [kPa]': np.NaN,
-                'sigma_x [kPa]': np.NaN,
-                'sigma_y [kPa]': np.NaN,
-                'tau_zx [kPa]': np.NaN,
+                'sigma_z [kPa]': np.nan,
+                'sigma_x [kPa]': np.nan,
+                'sigma_y [kPa]': np.nan,
+                'tau_zx [kPa]': np.nan,
             }
         else:
             raise

@@ -73,7 +73,7 @@ def plasticity_chart(liquid_limit, plasticity_index, fail_silently=True, **kwarg
         if fail_silently or fail_silently is None:
             return {
                 'classification [-]': None,
-                'aline_PI [%]': np.NaN,
+                'aline_PI [%]': np.nan,
             }
         else:
             raise

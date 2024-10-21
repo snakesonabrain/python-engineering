@@ -193,14 +193,14 @@ class BeamPointLoad(object):
                  supporttype_left="Support",supporttype_right="Support",seed=50,
                  fail_silently=True,**kwargs):
 
-        self.reaction_left = np.NaN
-        self.slope_left = np.NaN        # Radians!!
-        self.moment_left = np.NaN
-        self.deflection_left = np.NaN
-        self.shear_force = np.NaN
-        self.bending_moment = np.NaN
-        self.slope = np.NaN
-        self.deflection = np.NaN
+        self.reaction_left = np.nan
+        self.slope_left = np.nan        # Radians!!
+        self.moment_left = np.nan
+        self.deflection_left = np.nan
+        self.shear_force = np.nan
+        self.bending_moment = np.nan
+        self.slope = np.nan
+        self.deflection = np.nan
         rigidity = youngs_modulus * moment_inertia
         flip = False
 
@@ -334,14 +334,14 @@ class BeamPointLoad(object):
                 self.deflection = np.flipud(self.deflection)
 
         except:
-            self.reaction_left = np.NaN
-            self.slope_left = np.NaN  # Radians!!
-            self.moment_left = np.NaN
-            self.deflection_left = np.NaN
-            self.shear_force = np.NaN
-            self.bending_moment = np.NaN
-            self.slope = np.NaN
-            self.deflection = np.NaN
+            self.reaction_left = np.nan
+            self.slope_left = np.nan  # Radians!!
+            self.moment_left = np.nan
+            self.deflection_left = np.nan
+            self.shear_force = np.nan
+            self.bending_moment = np.nan
+            self.slope = np.nan
+            self.deflection = np.nan
 
             if fail_silently or fail_silently is None:
                 print("Error raised but silenced")
